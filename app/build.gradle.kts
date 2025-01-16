@@ -113,6 +113,13 @@ dependencies {
     //retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
 
+    //gettingi all of the icons
+    implementation ("androidx.compose.material:material-icons-extended")
+
+    //for status bar
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+
+
 }
 
 kapt {
