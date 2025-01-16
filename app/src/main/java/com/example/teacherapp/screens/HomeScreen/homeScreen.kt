@@ -1,0 +1,193 @@
+package com.example.teacherapp.screens.HomeScreen
+
+import android.graphics.drawable.Icon
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Usb
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.room.util.TableInfo
+import com.example.teacherapp.R
+
+@Preview
+@Composable
+fun HomeScreen(navController: NavController= NavController(LocalContext.current)) {
+    Scaffold { contentpadding ->
+
+        Surface(
+            modifier = Modifier
+                .padding(contentpadding)
+                .fillMaxSize(),
+            color = Color(0xFF1490CF)
+        ) {
+
+            Column {
+                Spacer(modifier = Modifier.height(30.dp))
+                Row(modifier = Modifier.padding(10.dp)) {
+
+                    Icon(
+                        imageVector = Icons.Rounded.AccountCircle,
+                        modifier = Modifier.size(80.dp),
+                        contentDescription = "User Icons"
+                    )
+
+                    Column(modifier = Modifier.padding(10.dp)) {
+                        Text(
+                            text = "Welcome!",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = "Sanskar Rijal",
+                            modifier = Modifier.padding(top = 10.dp),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    }
+
+                }
+                Spacer(modifier = Modifier.height(50.dp))
+                BackgroundCardView()
+            }
+        }
+    }
+}
+
+
+
+@Composable
+fun CardView(
+    icon:Painter,
+    title:String
+){
+    Card(modifier = Modifier
+        .height(160.dp)
+        .width(170.dp)
+        .padding(10.dp)
+        .clickable {
+
+        },
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+    ){
+        Column(modifier = Modifier
+            .padding(10.dp)
+            .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center){
+
+            Icon(painter = icon,
+                contentDescription = "Hat",
+                modifier = Modifier.size(50.dp))
+
+            Text(
+                modifier = Modifier.padding(10.dp),
+                text = title,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
+
+        }
+    }
+}
+
+
+
+@Preview
+@Composable
+fun BackgroundCardView() {
+    Card(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable {
+
+            },
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Box {
+            Image(
+                painter = painterResource(R.drawable.home_page_bg),
+                modifier = Modifier.fillMaxSize(),
+                contentDescription = "background",
+                contentScale = ContentScale.FillBounds)
+
+            Column(modifier = Modifier
+                .padding(10.dp)) {
+
+                Spacer(modifier = Modifier.height(80.dp))
+
+                Row(modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement =Arrangement.Absolute.SpaceEvenly) {
+                    CardView(
+                        title = "Attendance",
+                        icon = painterResource(id = R.drawable.attendance_icon)
+                    )
+                    CardView(
+                        title = "Internal Marks",
+                        icon = painterResource(id = R.drawable.internal_marks_icon)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement =Arrangement.Absolute.SpaceEvenly) {
+
+                    CardView( title = "Notes",
+                        icon = painterResource(id = R.drawable.notes_icon))
+
+                    CardView( title = "Notice",
+                        icon = painterResource(id = R.drawable.notice_icon))
+                }
+
+
+            }
+        }
+    }
+}

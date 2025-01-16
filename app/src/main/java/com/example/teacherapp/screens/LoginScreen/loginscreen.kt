@@ -62,13 +62,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
+import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.navigation.campusConnectScreen
 import org.w3c.dom.Text
 import kotlin.math.sin
 
-@Preview
+
 @Composable
-fun LoginScreen(){
+fun LoginScreen(navController: NavController){
     val uiState =null  //to be modified with api for loading animation
 
     Box {
@@ -124,7 +126,7 @@ fun LoginScreen(){
                     )
                 }
 
-                UserForm()
+                UserForm(navController = navController)
             }
         }
 
@@ -132,8 +134,9 @@ fun LoginScreen(){
 }
 
 @Composable
-@Preview
+
 fun UserForm(
+    navController: NavController,
     onDone:(String,String) ->Unit ={email,pass ->}
 ){
 
@@ -212,15 +215,17 @@ fun UserForm(
 
             }
         )
-    }
-    Row(modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End){
-        LoginButton(
-            Textid = "Login",
-            validinput =enable){
-            onDone(email.value,password.value)
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End){
+            LoginButton(
+                navController=navController,
+                Textid = "Login",
+                validinput =enable){
+                onDone(email.value,password.value)
+            }
         }
     }
+
 }
 
 
@@ -315,6 +320,7 @@ fun PasswordField(
 
 @Composable
 fun LoginButton(Textid:String,
+                navController: NavController,
                 validinput:Boolean,
                 onClick:()->Unit){
 
@@ -322,7 +328,7 @@ fun LoginButton(Textid:String,
 
     Button(onClick = {
         if(validinput){
-            Toast.makeText(context, "Next screen to be made", Toast.LENGTH_SHORT).show()
+            navController.navigate(campusConnectScreen.HomeScreen.name)
         }
         else{
             Toast.makeText(context, "Make sure email is at format xxx@ioepc.edu.np", Toast.LENGTH_SHORT).show()
