@@ -71,16 +71,17 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
                         modifier = Modifier.size(80.dp),
-                        contentDescription = "User Icons"
+                        contentDescription = "User Icons",
+                        tint = Color.Black.copy(0.5f)
                     )
 
                     Column(modifier = Modifier.padding(10.dp)) {
                         Text(
-                            text = "Welcome!",
+                            text = "Welcome !",
                             style = MaterialTheme.typography.labelMedium,
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = Color.Black.copy(0.8f)
                         )
                         Text(
                             text = "Sanskar Rijal",
@@ -88,7 +89,7 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = Color.Black.copy(0.8f)
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -102,13 +103,13 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Logout,
                             contentDescription = "LogOut",
-                            tint = Color.White.copy(alpha = 0.4f))
+                            tint = Color.Black.copy(alpha = 0.4f))
                         }
 
 
                 }
                 Spacer(modifier = Modifier.height(50.dp))
-                BackgroundCardView()
+                BackgroundCardView(navController)
             }
         }
     }
@@ -118,15 +119,17 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
 
 @Composable
 fun CardView(
+    size:Int=50,
     icon:Painter,
-    title:String
+    title:String,
+    onClick: () -> Unit
 ){
     Card(modifier = Modifier
         .height(160.dp)
         .width(170.dp)
         .padding(10.dp)
         .clickable {
-
+            onClick.invoke()
         },
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
@@ -139,8 +142,8 @@ fun CardView(
             verticalArrangement = Arrangement.Center){
 
             Icon(painter = icon,
-                contentDescription = "Hat",
-                modifier = Modifier.size(50.dp))
+                contentDescription = "Icon",
+                modifier = Modifier.size(size.dp))
 
             Text(
                 modifier = Modifier.padding(10.dp),
@@ -149,7 +152,8 @@ fun CardView(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                lineHeight = 23.sp
             )
 
         }
@@ -158,15 +162,12 @@ fun CardView(
 
 
 
-@Preview
+
 @Composable
-fun BackgroundCardView() {
+fun BackgroundCardView(navController: NavController) {
     Card(
         modifier = Modifier
-            .fillMaxSize()
-            .clickable {
-
-            },
+            .fillMaxSize(),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -189,11 +190,15 @@ fun BackgroundCardView() {
                     CardView(
                         title = "Attendance",
                         icon = painterResource(id = R.drawable.attendance_icon)
-                    )
-                    CardView(
-                        title = "Internal Marks",
-                        icon = painterResource(id = R.drawable.internal_marks_icon)
-                    )
+                    ){
+                        navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
+                    }
+
+                    CardView( title = "Notes",
+                        icon = painterResource(id = R.drawable.notes_icon)){
+
+                    }
+
                 }
 
                 Spacer(modifier = Modifier.height(50.dp))
@@ -201,11 +206,18 @@ fun BackgroundCardView() {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement =Arrangement.Absolute.SpaceEvenly) {
 
-                    CardView( title = "Notes",
-                        icon = painterResource(id = R.drawable.notes_icon))
-
                     CardView( title = "Notice",
-                        icon = painterResource(id = R.drawable.notice_icon))
+                        icon = painterResource(id = R.drawable.notice_icon)){
+
+                    }
+
+                    CardView(
+                        title = "Internal Marks",
+                        size = 40,
+                        icon = painterResource(id = R.drawable.internal_marks_icon)
+                    ){
+
+                    }
                 }
 
 
