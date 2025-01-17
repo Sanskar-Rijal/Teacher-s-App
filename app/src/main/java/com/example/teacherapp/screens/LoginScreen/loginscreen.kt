@@ -1,5 +1,6 @@
 package com.example.teacherapp.screens.LoginScreen
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +44,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -64,14 +67,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import org.w3c.dom.Text
+import kotlin.math.log
 import kotlin.math.sin
 
 
 @Composable
-fun LoginScreen(navController: NavController){
-    val uiState =null  //to be modified with api for loading animation
+fun LoginScreen(navController: NavController,loginViewmodel: LoginViewmodel){
+    val uiState =loginViewmodel.state.collectAsState()  //to be modified with api for loading animation
+
+    val context= LocalContext.current
 
     Box {
 
@@ -126,7 +133,18 @@ fun LoginScreen(navController: NavController){
                     )
                 }
 
-                UserForm(navController = navController)
+                UserForm(navController = navController){email,pass->
+                    loginViewmodel.loginTeacher(email,pass){
+                        navController.navigate(campusConnectScreen.HomeScreen.name)
+                    }
+                    Log.d("sangyog", "LoginScreen: ${uiState.value} ")
+                }
+                if(uiState.value== LoadingState.LOADING){
+                    LoadingDialog()
+                }
+                if(uiState.value== LoadingState.FAILED){
+                    Toast.makeText(context, uiState.value.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -213,7 +231,7 @@ fun UserForm(
                 .padding(10.dp)
                 .clickable {
 
-            }
+                }
         )
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End){
@@ -221,7 +239,7 @@ fun UserForm(
                 navController=navController,
                 Textid = "Login",
                 validinput =enable){
-                onDone(email.value,password.value)
+                onDone(email.value.trim(),password.value.trim())
             }
         }
     }
@@ -328,7 +346,7 @@ fun LoginButton(Textid:String,
 
     Button(onClick = {
         if(validinput){
-            navController.navigate(campusConnectScreen.HomeScreen.name)
+            onClick.invoke()
         }
         else{
             Toast.makeText(context, "Make sure email is at format xxx@ioepc.edu.np", Toast.LENGTH_SHORT).show()
