@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.teacherapp.screens.HomeScreen.HomeScreen
 import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
+import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
+import com.example.teacherapp.screens.notices.NoticeScreen
 import kotlin.math.log
 
 @Composable
@@ -44,6 +46,13 @@ fun CampusConnectNavigation() {
             AttendanceHomeScreen(navController)
         }
 
+        composable(campusConnectScreen.AddAttendanceScreen.name){
+            AddAttendanceScreen(navController)
+        }
+
+        composable(campusConnectScreen.NoticeScreen.name){
+            NoticeScreen(navController)
+        }
 
     }
 

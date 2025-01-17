@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.navigation.campusConnectScreen
 
 @Composable
 @Preview
@@ -60,6 +61,7 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
         floatingActionButton = {
             FloatingContent {
                 //navigate to the add icon
+                navController.navigate(campusConnectScreen.AddAttendanceScreen.name)
             }
         }
     ) { contentpadding ->

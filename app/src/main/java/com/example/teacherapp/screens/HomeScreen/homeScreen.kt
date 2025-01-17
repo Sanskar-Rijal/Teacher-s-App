@@ -209,6 +209,7 @@ fun BackgroundCardView(navController: NavController) {
                     CardView( title = "Notice",
                         icon = painterResource(id = R.drawable.notice_icon)){
 
+                        navController.navigate(campusConnectScreen.NoticeScreen.name)
                     }
 
                     CardView(
