@@ -6,6 +6,8 @@ import okhttp3.Cookie
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
+
+//capturing and storing cookies
 class CookiePreferences(context: Context) {
     private val prefs = context.getSharedPreferences("cookie_prefs", Context.MODE_PRIVATE)
 

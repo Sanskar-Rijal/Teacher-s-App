@@ -1,11 +1,15 @@
 package com.example.teacherapp.repository
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.example.teacherapp.cookiesmanage.AppCookieJar
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.login.LoginRequest
 import com.example.teacherapp.model.login.LoginResponse
 import com.example.teacherapp.network.loginApi
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.Interceptor
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -52,8 +56,18 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    //for coookeis
     fun logoutTeacher() {
         cookieJar.clearCookies()
+    }
+
+    fun getStoredCookies(domain:String):List<String>{
+        val url = "https://$domain".toHttpUrl() // val url = HttpUrl.get("https://$domain")
+        //val url = "https://sangyog-cc.vercel.app".toHttpUrl()
+
+        Log.d("smriti", "getStoredCookies: ${cookieJar.loadForRequest(url).map { it.toString() }}")
+
+        return cookieJar.loadForRequest(url).map { it.toString() }
     }
 }
 

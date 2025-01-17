@@ -1,5 +1,6 @@
 package com.example.teacherapp.screens.LoginScreen
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import com.example.teacherapp.data.DataorException
@@ -31,8 +32,15 @@ class LoginViewmodel @Inject constructor(private val repository: AuthRepository)
 
     val state= _state.asStateFlow()
 
-    val loading: LiveData<Boolean> = _loading
+    /**
+     * handling cookes checking every thing etc
+     */
+    var isLoggedIn by mutableStateOf(false)
 
+    fun checkStatusLoginStatus(domain:String){
+        val cookies = repository.getStoredCookies(domain)
+        isLoggedIn = cookies.any{it.contains("token")}
+    }
 
     fun loginTeacher(email: String, password: String,furtherAction:()->Unit) {
         viewModelScope.launch(Dispatchers.Main) {

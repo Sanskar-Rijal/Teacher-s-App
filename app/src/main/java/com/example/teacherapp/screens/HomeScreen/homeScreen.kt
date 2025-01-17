@@ -17,11 +17,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Usb
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -43,10 +45,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.room.util.TableInfo
 import com.example.teacherapp.R
+import com.example.teacherapp.navigation.campusConnectScreen
+import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
 
-@Preview
 @Composable
-fun HomeScreen(navController: NavController= NavController(LocalContext.current)) {
+fun HomeScreen(navController: NavController= NavController(LocalContext.current),
+               loginViewmodel: LoginViewmodel) {
     Scaffold { contentpadding ->
 
         Surface(
@@ -58,7 +62,11 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
 
             Column {
                 Spacer(modifier = Modifier.height(30.dp))
-                Row(modifier = Modifier.padding(10.dp)) {
+
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
 
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
@@ -83,6 +91,20 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                             color = Color.Black
                         )
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    IconButton(modifier = Modifier.padding(start = 30.dp, top = 15.dp),
+                            onClick = {
+                                loginViewmodel.logoutTeacher()
+                                navController.navigate(campusConnectScreen.LoginScreen.name)
+
+                    },) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = "LogOut",
+                            tint = Color.White.copy(alpha = 0.4f))
+                        }
+
 
                 }
                 Spacer(modifier = Modifier.height(50.dp))

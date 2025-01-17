@@ -223,16 +223,16 @@ fun UserForm(
             keyboardtype = KeyboardType.Password
         )
 
-        Text(text = "Forgot Password?",
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF5329C5),
-            modifier = Modifier
-                .padding(10.dp)
-                .clickable {
-
-                }
-        )
+//        Text(text = "Forgot Password?",
+//            style = MaterialTheme.typography.labelMedium,
+//            fontWeight = FontWeight.Bold,
+//            color = Color(0xFF5329C5),
+//            modifier = Modifier
+//                .padding(10.dp)
+//                .clickable {
+//
+//                }
+//        )
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End){
             LoginButton(
