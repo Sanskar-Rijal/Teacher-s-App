@@ -9,8 +9,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.teacherapp.screens.HomeScreen.HomeScreen
 import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
+import com.example.teacherapp.screens.NotesScreen.AddNotesScreen
+import com.example.teacherapp.screens.NotesScreen.NotesHomeScreen
 import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
+import com.example.teacherapp.screens.internalmarks.AddInternalMarks
+import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
 import kotlin.math.log
 
@@ -52,6 +56,22 @@ fun CampusConnectNavigation() {
 
         composable(campusConnectScreen.NoticeScreen.name){
             NoticeScreen(navController)
+        }
+
+        composable(campusConnectScreen.NotesHomeScreen.name){
+            NotesHomeScreen(navController)
+        }
+
+        composable(campusConnectScreen.AddNotesScreen.name){
+            AddNotesScreen(navController)
+        }
+
+        composable(campusConnectScreen.InternalMarksHomeScreen.name){
+            InternalMarksHomeScreen(navController)
+        }
+
+        composable(campusConnectScreen.AddInternalMarksScreen.name){
+            AddInternalMarks(navController)
         }
 
     }

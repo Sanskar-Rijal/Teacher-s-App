@@ -196,7 +196,7 @@ fun BackgroundCardView(navController: NavController) {
 
                     CardView( title = "Notes",
                         icon = painterResource(id = R.drawable.notes_icon)){
-
+                        navController.navigate(campusConnectScreen.NotesHomeScreen.name)
                     }
 
                 }
@@ -217,7 +217,7 @@ fun BackgroundCardView(navController: NavController) {
                         size = 40,
                         icon = painterResource(id = R.drawable.internal_marks_icon)
                     ){
-
+                        navController.navigate(campusConnectScreen.InternalMarksHomeScreen.name)
                     }
                 }
 

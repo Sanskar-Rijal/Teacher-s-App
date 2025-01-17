@@ -8,5 +8,9 @@ enum class campusConnectScreen {
     AddAttendanceScreen,
     AttendanceShowScreen,
     AttendanceTakeScreen,
-    NoticeScreen
+    NoticeScreen,
+    NotesHomeScreen,
+    AddNotesScreen,
+    InternalMarksHomeScreen,
+    AddInternalMarksScreen
 }
