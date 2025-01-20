@@ -14,6 +14,7 @@ import com.example.teacherapp.screens.NotesScreen.NotesHomeScreen
 import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
 import com.example.teacherapp.screens.attendance.AttendanceViewModel
+import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
 import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
@@ -54,7 +55,8 @@ fun CampusConnectNavigation() {
         }
 
         composable(campusConnectScreen.AddAttendanceScreen.name){
-            AddAttendanceScreen(navController)
+            val AttendanceHomeScreenViewModel = hiltViewModel<AttendanceViewModel_to_add_subj>()
+            AddAttendanceScreen(navController,AttendanceHomeScreenViewModel)
         }
 
         composable(campusConnectScreen.NoticeScreen.name){

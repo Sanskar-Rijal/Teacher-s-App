@@ -42,7 +42,7 @@ class AttendanceViewModel @Inject constructor(private val repository: Get_Teache
         fetchSubjects()
     }
 
-
+//for fetching the already added Subjects
     fun fetchSubjects() {
         viewModelScope.launch(Dispatchers.Main) {
             _state.value = LoadingState.LOADING

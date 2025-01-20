@@ -1,5 +1,7 @@
 package com.example.teacherapp.network
 
+import com.example.teacherapp.model.addSubject.AddSubjRequest
+import com.example.teacherapp.model.addSubject.AddsubjResponse
 import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.model.login.LoginRequest
 import com.example.teacherapp.model.login.LoginResponse
@@ -20,6 +22,7 @@ interface network {
     @GET(value = Constants.get_added_data)
     suspend fun getAddedData():getsubjects
 
-
-
+    @POST(value = Constants.add_subject)
+    suspend fun addSubject(
+        @Body addSubjRequest: AddSubjRequest):AddsubjResponse
 }

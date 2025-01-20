@@ -147,7 +147,7 @@ val subjectsMap = mapOf(
         ),
         "6" to listOf(
             Subject("Design of Steel and Timber Structure", "CE651"),
-            Subject("Communication English", "SH6no no i don't want to create a random function or something you that is you rewrite everything51"),
+            Subject("Communication English", "SH651"),
             Subject("Engineering Economics", "CE655"),
             Subject("Building Technology", "CE652"),
             Subject("Sanitary Engineering", "CE656"),

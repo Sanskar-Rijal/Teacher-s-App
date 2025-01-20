@@ -66,7 +66,7 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
                 //when the back icon is pressed then
-                navController.popBackStack()
+                navController.navigate(campusConnectScreen.HomeScreen.name)
             }
         },
         floatingActionButton = {

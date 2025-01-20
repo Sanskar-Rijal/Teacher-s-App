@@ -1,6 +1,7 @@
 package com.example.teacherapp.screens.attendance
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,14 +54,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
-import com.example.teacherapp.model.login.LoginResponse
+import com.example.teacherapp.navigation.campusConnectScreen
+import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.utils.sectionsMap
 import com.example.teacherapp.utils.subjectsMap
+import kotlin.math.log
 
-@Preview
+
 @Composable
-fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.current)) {
+fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.current),
+                        viewmodel:AttendanceViewModel_to_add_subj) {
+
+    val uiState=viewmodel.state.collectAsState()
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             AppBarbySans(
@@ -85,7 +96,17 @@ fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.
 
                 Column(modifier = Modifier
                     .padding(10.dp)) {
-                    AddCourseScreen()
+
+                    AddCourseScreen{faculty,semester,section,subjectcode->
+                        viewmodel.addSubject(faculty,semester,section,subjectcode){
+                            Log.d("pravin", "inside navcontroller: ")
+                            navController.navigate(campusConnectScreen.AttendanceHomeScreen.name) //navigate to attendance Screen Instead
+                        }
+                    }
+                    if(uiState.value== LoadingState.LOADING){
+                        LoadingDialog()
+                    }
+
                 }
 
             }
@@ -96,12 +117,16 @@ fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.
 }
 
 @Composable
-fun AddCourseScreen() {
+fun AddCourseScreen(
+    onDone:(String,String,String,String)->Unit={faculty,semester,section,subjectcode->}
+) {
+
+    val context = LocalContext.current
 
     var selectedfaculty by remember {
         mutableStateOf("")
     }
-    var selectedSemester by remember  {
+    var selectedSemester by remember {
         mutableStateOf("")
     }
     var selectedsection by remember {
@@ -116,21 +141,27 @@ fun AddCourseScreen() {
         mutableStateOf("")
     }
 
-    val faculty = listOf("COMPUTER","CIVIL")
-    val sem = listOf("1", "2", "3","4","5","6","7","8")
+    //checking if selectedfaculty and selectedSemester is not empty then only show subjects
+    var valid = remember(selectedfaculty, selectedSemester, selectedsubject, selectedsection) {
+        selectedfaculty.trim().isNotEmpty() && selectedSemester.trim().isNotEmpty()
+                && selectedsubject.trim().isNotEmpty() && selectedsection.trim()
+            .isNotEmpty() //empty xaina vane true falxa
+    }
 
-    val filterSubjects = remember(selectedfaculty,selectedSemester){
+    val faculty = listOf("COMPUTER", "CIVIL")
+    val sem = listOf("1", "2", "3", "4", "5", "6", "7", "8")
+
+    val filterSubjects = remember(selectedfaculty, selectedSemester) {
         subjectsMap[selectedfaculty]?.get(selectedSemester)?.map {
             "${it.name} [${it.code}]" //to show subject name and code
-        }?: listOf("Select faculty and semester first")
+        } ?: listOf("Select faculty and semester first")
     }
 
 
-
-    val sections= remember(selectedfaculty){
+    val sections = remember(selectedfaculty) {
         sectionsMap[selectedfaculty]?.map {
             it.sec
-        }?:listOf("Select faculty and semester first")
+        } ?: listOf("Select faculty and semester first")
     }
 
     Log.d("karuna", "AddCourseScreen:$selectedsubjCode ")
@@ -167,7 +198,9 @@ fun AddCourseScreen() {
         )
 
         DropdownMenuComponent(
-            modifier =  if(selectedfaculty.isNotEmpty() && selectedSemester.isNotEmpty()) Modifier.height(300.dp) else Modifier,
+            modifier = if (selectedfaculty.isNotEmpty() && selectedSemester.isNotEmpty()) Modifier.height(
+                300.dp
+            ) else Modifier,
             label = "Select your Subject",
             options = filterSubjects,
             selectedOption = selectedsubject,
@@ -178,10 +211,21 @@ fun AddCourseScreen() {
             }
         )
 
-    //create Button
-        sansButton(text = "Create",
-            modifier = Modifier.fillMaxWidth()) {
-            //to do something when button is clicked
+        //create Button
+        sansButton(
+            text = "Create",
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (!valid) {
+                Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+            } else {
+                //to do something when button is clicked
+                onDone(selectedfaculty, selectedSemester, selectedsection, selectedsubjCode)
+                Log.d(
+                    "pravin",
+                    "$selectedfaculty,$selectedSemester,$selectedsection,$selectedsubjCode"
+                )
+            }
         }
     }
 }
