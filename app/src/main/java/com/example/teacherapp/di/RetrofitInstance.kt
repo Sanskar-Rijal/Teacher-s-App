@@ -1,7 +1,7 @@
 package com.example.teacherapp.di
 
 import com.example.teacherapp.cookiesmanage.AppCookieJar
-import com.example.teacherapp.network.loginApi
+import com.example.teacherapp.network.network
 import com.example.teacherapp.utils.Constants
 import android.content.Context
 import dagger.Module
@@ -34,13 +34,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideBooksApi(client: OkHttpClient): loginApi {
+    fun provideBooksApi(client: OkHttpClient): network {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(loginApi::class.java)
+            .create(network::class.java)
     }
 }
 

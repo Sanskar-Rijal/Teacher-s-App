@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -28,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,11 +45,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
+import com.example.teacherapp.screens.LoginScreen.LoadingState
 
 @Composable
-@Preview
-fun AttendanceHomeScreen(navController: NavController= NavController(LocalContext.current)) {
+fun AttendanceHomeScreen(navController: NavController= NavController(LocalContext.current),
+                         viewModel: AttendanceViewModel) {
+
+    //getting data from viewmodel
+    val data = viewModel.item
+
+    val uiState = viewModel.state.collectAsState()
+
     Scaffold(
         topBar = {
             AppBarbySans(
@@ -71,31 +82,31 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                 painter = painterResource(R.drawable.home_page_bg),
                 modifier = Modifier.fillMaxSize(),
                 contentDescription = "background",
-                contentScale = ContentScale.FillBounds)
+                contentScale = ContentScale.FillBounds
+            )
 
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(contentpadding),
-                color = Color.Transparent){
-                Column(modifier = Modifier.padding(10.dp)) {
+                color = Color.Transparent
+            ) {
 
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top) {
-                        item {
-                                CardView()
-                                CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
+                //checking whether data is loading or not
+                if (uiState.value == LoadingState.LOADING) {
+                    LoadingDialog()
+                } else {
+                    Column(modifier = Modifier.padding(10.dp)) {
 
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top
+                        ) {
+                            items(data.subjects){eachSubj->
+                                CardView(eachSubj)
+                            }
                         }
                     }
                 }
@@ -119,9 +130,10 @@ fun FloatingContent(onClick:(String)->Unit ){
 
 
 //to show subject name
-@Preview
+
 @Composable
 fun CardView(
+    eachsubj:Subject,
     size:Int=50,
     title:String="hehehe",
     onClick: () -> Unit={}
@@ -144,7 +156,7 @@ fun CardView(
             verticalArrangement = Arrangement.Center){
 
             Text(
-                text = "C-Programming",
+                text = eachsubj.name?:"No Data",
                 modifier = Modifier.padding(bottom = 5.dp),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -154,7 +166,7 @@ fun CardView(
                 letterSpacing = 0.5.sp
             )
             Text(
-                text = "BCT-078 AB",
+                text = eachsubj.faculty?:"No Data",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.LightGray,

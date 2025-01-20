@@ -26,7 +26,7 @@ class LoginViewmodel @Inject constructor(private val repository: AuthRepository)
     var isLoading:Boolean by mutableStateOf(false)
 
     //for making state for loading idle etc
-    private val _loading = MutableLiveData(false)
+    //private val _loading = MutableLiveData(false)
 
     private val _state= MutableStateFlow(LoadingState.IDLE)
 
@@ -57,20 +57,20 @@ class LoginViewmodel @Inject constructor(private val repository: AuthRepository)
                     is DataorException.Success->{
 
                         item=response.data!!
-                        Log.d("april", "success: ${item} ")
+                      //  Log.d("april", "success: ${item} ")
                         if(item.success == true){
 
                             _state.value= LoadingState.SUCCESS
 
                             furtherAction()
-                            Log.d("samsth", "inside successblock ")
+                           // Log.d("samsth", "inside successblock ")
                             isLoading=false
                         }
                     }
                     is DataorException.Error->{
                         _state.value= LoadingState.FAILED
                         _state.value.message=response.message
-                        Log.d("april", "error: ${response.message} ")
+                      //  Log.d("april", "error: ${response.message} ")
                         isLoading=false
                     }
                     else ->{

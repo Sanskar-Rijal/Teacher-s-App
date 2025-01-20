@@ -1,12 +1,21 @@
 package com.example.teacherapp.screens.attendance
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -36,13 +45,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.sansButton
 import com.example.teacherapp.model.login.LoginResponse
+import com.example.teacherapp.utils.sectionsMap
+import com.example.teacherapp.utils.subjectsMap
 
 @Preview
 @Composable
@@ -70,7 +83,8 @@ fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.
                     .padding(contentpadding),
                 color = Color.Transparent) {
 
-                Column(modifier = Modifier.padding(10.dp)) {
+                Column(modifier = Modifier
+                    .padding(10.dp)) {
                     AddCourseScreen()
                 }
 
@@ -84,23 +98,42 @@ fun AddAttendanceScreen(navController: NavController=NavController(LocalContext.
 @Composable
 fun AddCourseScreen() {
 
-    var selectedfaculty by rememberSaveable {
+    var selectedfaculty by remember {
         mutableStateOf("")
     }
-    var selectedbatch by rememberSaveable  {
+    var selectedSemester by remember  {
         mutableStateOf("")
     }
-    var selectedsection by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var selectedsubject by rememberSaveable {
+    var selectedsection by remember {
         mutableStateOf("")
     }
 
-    val faculty = listOf("BCT","BEI")
-    val batch = listOf("081", "080", "079","078","077")
-    val subjects = listOf("Math", "Physics", "Computer Science")
+    var selectedsubject by remember {
+        mutableStateOf("")
+    }
+
+    var selectedsubjCode by remember {
+        mutableStateOf("")
+    }
+
+    val faculty = listOf("COMPUTER","CIVIL")
+    val sem = listOf("1", "2", "3","4","5","6","7","8")
+
+    val filterSubjects = remember(selectedfaculty,selectedSemester){
+        subjectsMap[selectedfaculty]?.get(selectedSemester)?.map {
+            "${it.name} [${it.code}]" //to show subject name and code
+        }?: listOf("Select faculty and semester first")
+    }
+
+
+
+    val sections= remember(selectedfaculty){
+        sectionsMap[selectedfaculty]?.map {
+            it.sec
+        }?:listOf("Select faculty and semester first")
+    }
+
+    Log.d("karuna", "AddCourseScreen:$selectedsubjCode ")
 
     Column(
         modifier = Modifier
@@ -111,7 +144,7 @@ fun AddCourseScreen() {
     ) {
         // College Dropdown
         DropdownMenuComponent(
-            label = "Select your faculty",
+            label = "Select faculty",
             options = faculty,
             selectedOption = selectedfaculty,
             onOptionSelected = { selectedfaculty = it }
@@ -119,25 +152,30 @@ fun AddCourseScreen() {
 
         // Section Dropdown
         DropdownMenuComponent(
-            label = "Select your sem",
-            options = batch,
-            selectedOption = selectedbatch,
-            onOptionSelected = { selectedbatch = it }
+            label = "Select Semester",
+            options = sem,
+            selectedOption = selectedSemester,
+            onOptionSelected = { selectedSemester = it }
         )
 
         // Subject Dropdown
         DropdownMenuComponent(
             label = "Select your Section",
-            options = subjects,
+            options = sections,
             selectedOption = selectedsection,
             onOptionSelected = { selectedsection = it }
         )
 
         DropdownMenuComponent(
+            modifier =  if(selectedfaculty.isNotEmpty() && selectedSemester.isNotEmpty()) Modifier.height(300.dp) else Modifier,
             label = "Select your Subject",
-            options = subjects,
+            options = filterSubjects,
             selectedOption = selectedsubject,
-            onOptionSelected = { selectedsubject = it }
+            onOptionSelected = {
+                selectedsubject = it
+                val code = it.substringAfter('[').substringBefore(']')
+                selectedsubjCode = code
+            }
         )
 
     //create Button
@@ -151,6 +189,7 @@ fun AddCourseScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownMenuComponent(
+    modifier: Modifier=Modifier,
     label: String,
     options: List<String>,
     selectedOption: String,
@@ -179,12 +218,24 @@ fun DropdownMenuComponent(
         )
 
         ExposedDropdownMenu(
+            modifier = modifier
+                .background(color = Color.White)
+                .padding(2.dp),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            text = option,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.bodyLarge,
+                            letterSpacing = 0.5.sp,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
+                    ,
                     onClick = {
                         onOptionSelected(option)
                         expanded = false

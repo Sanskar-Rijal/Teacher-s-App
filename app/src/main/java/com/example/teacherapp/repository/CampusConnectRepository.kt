@@ -1,19 +1,16 @@
 package com.example.teacherapp.repository
 
-import android.content.SharedPreferences
 import android.util.Log
 import com.example.teacherapp.cookiesmanage.AppCookieJar
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.login.LoginRequest
 import com.example.teacherapp.model.login.LoginResponse
-import com.example.teacherapp.network.loginApi
-import okhttp3.HttpUrl
+import com.example.teacherapp.network.network
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.Interceptor
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
-    private val booksApi: loginApi,
+    private val network: network,
     private val cookieJar: AppCookieJar
 ) {
 
@@ -21,7 +18,7 @@ class AuthRepository @Inject constructor(
         return try {
             DataorException.Loading(data = true)
 
-            val response = booksApi.LoginTeacher(LoginRequest(email, password))
+            val response = network.LoginTeacher(LoginRequest(email, password))
             Log.d("april", "repository $response ")
 
             DataorException.Success(data = response)
@@ -69,6 +66,8 @@ class AuthRepository @Inject constructor(
 
         return cookieJar.loadForRequest(url).map { it.toString() }
     }
+
+
 }
 
 
