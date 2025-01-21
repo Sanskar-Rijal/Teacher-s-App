@@ -127,7 +127,7 @@ fun LoginScreen(navController: NavController,loginViewmodel: LoginViewmodel){
                     Text(text = "Login",
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.ExtraBold)
-                    Text(text = "please sign in to continue",
+                    Text(text = "Please sign in to continue",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Normal,
                         color = Color.Gray

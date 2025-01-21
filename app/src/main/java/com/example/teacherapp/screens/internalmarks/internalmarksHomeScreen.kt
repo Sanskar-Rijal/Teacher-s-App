@@ -1,14 +1,10 @@
 package com.example.teacherapp.screens.internalmarks
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,12 +28,12 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.AttendanceViewModel
+import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
 import com.example.teacherapp.screens.attendance.FloatingContent
 
 @Composable
 fun InternalMarksHomeScreen(navController: NavController = NavController(LocalContext.current),
-                            viewModel: AttendanceViewModel
+                            viewModel: GetAllTeacherSubj_Viewmodel
 ) {
 
     val data = viewModel.item
@@ -61,7 +57,7 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
         floatingActionButton = {
             FloatingContent {
                 //navigate to the add icon
-                navController.navigate(campusConnectScreen.AddAttendanceScreen.name)
+                navController.navigate(campusConnectScreen.AddInternalMarksScreen.name)
             }
         }
     ) { contentpadding ->

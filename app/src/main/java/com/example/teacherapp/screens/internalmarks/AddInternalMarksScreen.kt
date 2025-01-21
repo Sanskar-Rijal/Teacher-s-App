@@ -1,6 +1,5 @@
 package com.example.teacherapp.screens.internalmarks
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +24,11 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
+import com.example.teacherapp.screens.attendance.ViewModel_to_add_subj
 
 @Composable
 fun AddInternalMarks(navController: NavController = NavController(LocalContext.current),
-                     viewmodel: AttendanceViewModel_to_add_subj
+                     viewmodel: ViewModel_to_add_subj
 ) {
 
     val uiState=viewmodel.state.collectAsState()
@@ -64,7 +63,7 @@ fun AddInternalMarks(navController: NavController = NavController(LocalContext.c
 
                     AddCourseScreen{faculty,semester,section,subjectcode->
                         viewmodel.addSubject(faculty,semester,section,subjectcode){
-                            navController.navigate(campusConnectScreen.AddAttendanceScreen.name) //navigate to attendance Screen Instead
+                            navController.navigate(campusConnectScreen.InternalMarksHomeScreen.name) //navigate to attendance Screen Instead
                         }
                     }
                     if(uiState.value== LoadingState.LOADING){

@@ -1,7 +1,6 @@
 package com.example.teacherapp.screens.attendance
 
 import android.util.Log
-import android.view.View
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,18 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.addSubject.AddSubjRequest
 import com.example.teacherapp.model.addSubject.AddsubjResponse
-import com.example.teacherapp.model.login.LoginResponse
 import com.example.teacherapp.repository.Add_Teacher_Subjects
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AttendanceViewModel_to_add_subj @Inject constructor(
+class ViewModel_to_add_subj @Inject constructor(
     private val repository:Add_Teacher_Subjects
 ): ViewModel() {
     var item :AddsubjResponse by mutableStateOf(AddsubjResponse(success = false, message = ""))

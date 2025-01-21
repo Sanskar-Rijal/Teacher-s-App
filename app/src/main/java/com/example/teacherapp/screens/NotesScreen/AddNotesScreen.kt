@@ -2,7 +2,6 @@ package com.example.teacherapp.screens.NotesScreen
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,11 +25,11 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
+import com.example.teacherapp.screens.attendance.ViewModel_to_add_subj
 
 @Composable
 fun AddNotesScreen(navController: NavController = NavController(LocalContext.current),
-                   viewmodel: AttendanceViewModel_to_add_subj) {
+                   viewmodel: ViewModel_to_add_subj) {
     val uiState=viewmodel.state.collectAsState()
 
     Scaffold(
@@ -39,7 +38,7 @@ fun AddNotesScreen(navController: NavController = NavController(LocalContext.cur
                 title = "Add Notes",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
-                navController.navigate(campusConnectScreen.NotesHomeScreen.name)
+                navController.popBackStack()
             }
         }
     ) { contentpadding ->

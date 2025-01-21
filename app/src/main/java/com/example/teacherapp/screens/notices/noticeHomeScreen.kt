@@ -14,7 +14,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,20 +28,17 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.AttendanceViewModel
+import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
 
 @Composable
 fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.current),
-                    viewModel: AttendanceViewModel
+                    viewModel: GetAllTeacherSubj_Viewmodel
 ) {
     //getting data from viewmodel
     val data = viewModel.item
 
     val uiState = viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = null) {
-        viewModel.fetchSubjects()
-    }
 
     Scaffold(
         topBar = {

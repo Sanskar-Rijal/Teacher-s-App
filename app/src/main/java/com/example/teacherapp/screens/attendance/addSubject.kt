@@ -28,7 +28,7 @@ import com.example.teacherapp.screens.LoginScreen.LoadingState
 
 @Composable
 fun AddAttendanceScreen(navController: NavController,
-                        viewmodel:AttendanceViewModel_to_add_subj) {
+                        viewmodel:ViewModel_to_add_subj) {
 
     val uiState=viewmodel.state.collectAsState()
 
@@ -40,7 +40,7 @@ fun AddAttendanceScreen(navController: NavController,
                 title = "Add Subject",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
-                navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
+                navController.popBackStack()
             }
         }
     ) { contentpadding ->

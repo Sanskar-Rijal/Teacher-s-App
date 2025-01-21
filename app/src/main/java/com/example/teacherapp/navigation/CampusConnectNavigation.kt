@@ -9,18 +9,19 @@ import androidx.navigation.compose.rememberNavController
 import com.example.teacherapp.screens.HomeScreen.HomeScreen
 import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
+import com.example.teacherapp.screens.NotesScreen.AddNotesScreen
 import com.example.teacherapp.screens.NotesScreen.NotesHomeScreen
 import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
-import com.example.teacherapp.screens.attendance.AttendanceViewModel
-import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
-import com.example.teacherapp.screens.attendance.ChooseAttendanceScreen
+import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
+import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
+import com.example.teacherapp.screens.attendance.ViewModel_to_add_subj
 import com.example.teacherapp.screens.attendance.ShowAttendance
 import com.example.teacherapp.screens.attendance.TakeAttendance
+import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
-import kotlin.math.log
 
 @Composable
 fun CampusConnectNavigation() {
@@ -39,9 +40,6 @@ fun CampusConnectNavigation() {
     }
 
 
-    //viewmodel to add new subject by teacher
-    val addNewsubj = hiltViewModel<AttendanceViewModel_to_add_subj>()
-
     NavHost(navController=navController,
         startDestination = campusConnectScreen.LoginScreen.name){
 
@@ -56,21 +54,21 @@ fun CampusConnectNavigation() {
 
         composable(campusConnectScreen.AttendanceHomeScreen.name){
             //viewmodel to show all subject of teacher
-            val AttendanceViewModel:AttendanceViewModel= hiltViewModel<AttendanceViewModel>()
+            val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             AttendanceHomeScreen(navController,AttendanceViewModel)
         }
 
         composable(campusConnectScreen.AddAttendanceScreen.name){
+            //viewmodel to add new subject by teacher
+            val addNewsubj = hiltViewModel<ViewModel_to_add_subj>()
 
             AddAttendanceScreen(navController,addNewsubj)
         }
 
-        composable(campusConnectScreen.ChooseAttendanceScreen.name){
-            ChooseAttendanceScreen(navController)
-        }
 
         composable(campusConnectScreen.TakeAttendanceScreen.name){
-            TakeAttendance(navController)
+            val viewmodel:GetStudentBySection_Viewmodel= hiltViewModel<GetStudentBySection_Viewmodel>()
+            TakeAttendance(navController,viewmodel)
         }
 
         composable(campusConnectScreen.ShowAttendanceScreen.name){
@@ -79,7 +77,7 @@ fun CampusConnectNavigation() {
 
         composable(campusConnectScreen.NoticeHomeScreen.name){
             //viewmodel to show all subject of teacher
-            val AttendanceViewModel:AttendanceViewModel= hiltViewModel<AttendanceViewModel>()
+            val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             NoticeHomeScreen(navController,AttendanceViewModel)
         }
 
@@ -89,23 +87,27 @@ fun CampusConnectNavigation() {
 
         composable(campusConnectScreen.NotesHomeScreen.name){
             //viewmodel to show all subject of teacher
-            val AttendanceViewModel:AttendanceViewModel= hiltViewModel<AttendanceViewModel>()
+            val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             NotesHomeScreen(navController,AttendanceViewModel)
         }
 
-//        composable(campusConnectScreen.AddNotesScreen.name){
-//            AddNotesScreen(navController,addNewsubj)
-//        }
+        composable(campusConnectScreen.AddNotesScreen.name){
+            //viewmodel to add new subject by teacher
+            val addNewsubj = hiltViewModel<ViewModel_to_add_subj>()
+            AddNotesScreen(navController,addNewsubj)
+        }
 
         composable(campusConnectScreen.InternalMarksHomeScreen.name){
             //viewmodel to show all subject of teacher
-            val AttendanceViewModel:AttendanceViewModel= hiltViewModel<AttendanceViewModel>()
+            val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             InternalMarksHomeScreen(navController,AttendanceViewModel)
         }
 
-//        composable(campusConnectScreen.AddInternalMarksScreen.name){
-//            AddInternalMarks(navController,addNewsubj)
-//        }
+        composable(campusConnectScreen.AddInternalMarksScreen.name){
+            //viewmodel to add new subject by teacher
+            val addNewsubj = hiltViewModel<ViewModel_to_add_subj>()
+            AddInternalMarks(navController,addNewsubj)
+        }
 
 
     }

@@ -37,7 +37,7 @@ fun CardView(
         .fillMaxWidth()
         .padding(5.dp)
         .clickable {
-            onClick.invoke()
+            onClick()
         },
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),

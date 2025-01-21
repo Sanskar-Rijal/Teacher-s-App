@@ -1,5 +1,6 @@
 package com.example.teacherapp.screens.attendance
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -24,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,15 +44,38 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
 import com.example.teacherapp.model.getAddedData.Subject
+import com.example.teacherapp.model.getAddedData.getsubjects
+import com.example.teacherapp.model.getstudentbysec.StudentX
+import com.example.teacherapp.model.getstudentbysec.studentResponse
+import com.example.teacherapp.screens.LoginScreen.LoadingState
 
-@Preview
+
 @Composable
-fun TakeAttendance(navController: NavController=NavController(LocalContext.current)) {
+fun TakeAttendance(navController: NavController=NavController(LocalContext.current)
+,viewmodel: GetStudentBySection_Viewmodel= hiltViewModel()
+) {
+
+    val data: studentResponse = viewmodel.item
+
+    val uiState = viewmodel.state.collectAsState()
+
+    LaunchedEffect(key1 = null) {
+        viewmodel.getStudentBySection(
+            faculty = "COMPUTER",
+            semester = "6",
+            section = "CD"
+        )
+    }
+
+    Log.d("Smriti", "kei na kei ta ho : $data ")
+
     Scaffold(
         topBar = {
             AppBarbySans(
@@ -73,25 +100,26 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                     .padding(contentpadding),
                 color = Color.Transparent
             ) {
-                Column(modifier = Modifier.padding(5.dp)) {
+                if (uiState.value == LoadingState.LOADING) {
+                    LoadingDialog()
+                } else {
+                    Column(modifier = Modifier.padding(5.dp)) {
 
-                    LazyColumn(
-                        modifier = Modifier.padding(10.dp), contentPadding = PaddingValues(10.dp)
-                    ) {
-                        item {
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-                            takeAtt()
-
-                            sansButton(text = "Save") {
-                                //when button is pressed then data is to be sent to backend
+                        LazyColumn(
+                            modifier = Modifier.padding(10.dp),
+                            contentPadding = PaddingValues(10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            items(data.students) { student->
+                                takeAtt(student)
+                            }
+                            item {
+                                sansButton(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "Save"
+                                ) {
+                                    //when button is pressed then data is to be sent to backend
+                                }
                             }
                         }
                     }
@@ -103,6 +131,7 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 
 @Composable
 fun takeAtt(
+    student:StudentX,
     size:Int=50,
     title:String="Sanskar",
     onClick: () -> Unit={}
@@ -118,7 +147,8 @@ fun takeAtt(
             .padding(5.dp)
             .clickable {
 
-                isChecked=!isChecked //if the card is clicked then also the checkbox should be clicked
+                isChecked =
+                    !isChecked //if the card is clicked then also the checkbox should be clicked
 
                 onClick.invoke()
             },
@@ -142,7 +172,7 @@ fun takeAtt(
             ) {
 
                 Text(
-                    text = title,
+                    text = student.name?:"no data",
                     modifier = Modifier.padding(bottom = 5.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -154,7 +184,7 @@ fun takeAtt(
                     letterSpacing = 0.5.sp
                 )
                 Text(
-                    text = "PUR078BCT079",
+                    text = student.email?:"no data",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = Color.LightGray,

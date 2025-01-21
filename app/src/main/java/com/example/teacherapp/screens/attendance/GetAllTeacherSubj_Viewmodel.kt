@@ -4,13 +4,10 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.getAddedData.getsubjects
-import com.example.teacherapp.model.login.LoginResponse
-import com.example.teacherapp.repository.AuthRepository
 import com.example.teacherapp.repository.Get_Teacher_Subjects
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AttendanceViewModel @Inject constructor(private val repository: Get_Teacher_Subjects):ViewModel() {
+class GetAllTeacherSubj_Viewmodel @Inject constructor(private val repository: Get_Teacher_Subjects):ViewModel() {
 
     var item: getsubjects by mutableStateOf(getsubjects(subjects = emptyList(), success = false))
 
