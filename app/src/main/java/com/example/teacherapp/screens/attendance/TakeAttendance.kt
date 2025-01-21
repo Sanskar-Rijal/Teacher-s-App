@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.sansButton
 import com.example.teacherapp.model.getAddedData.Subject
 
 @Preview
@@ -70,30 +71,31 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(contentpadding),
-                color = Color.Transparent) {
-                LazyColumn(modifier = Modifier.padding(10.dp)
-                , contentPadding = PaddingValues(10.dp)
-                ) {
-                    item {
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
-                        takeAtt()
+                color = Color.Transparent
+            ) {
+                Column(modifier = Modifier.padding(5.dp)) {
+
+                    LazyColumn(
+                        modifier = Modifier.padding(10.dp), contentPadding = PaddingValues(10.dp)
+                    ) {
+                        item {
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+                            takeAtt()
+
+                            sansButton(text = "Save") {
+                                //when button is pressed then data is to be sent to backend
+                            }
+                        }
                     }
                 }
-
             }
         }
     }

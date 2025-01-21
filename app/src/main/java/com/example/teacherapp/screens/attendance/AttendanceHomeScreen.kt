@@ -1,5 +1,6 @@
 package com.example.teacherapp.screens.attendance
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -167,11 +168,12 @@ fun CardView(
                 lineHeight = 23.sp,
                 letterSpacing = 0.5.sp
             )
+            Log.d("sagar", "$eachsubj ")
             Text(
-                text = eachsubj.faculty?:"No Data",
+                text = "${eachsubj.faculty?:"No Data"} ${eachsubj.section?:"No Data"}",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color.LightGray,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color.Gray,
                 textAlign = TextAlign.Center,
                 lineHeight = 23.sp
             )

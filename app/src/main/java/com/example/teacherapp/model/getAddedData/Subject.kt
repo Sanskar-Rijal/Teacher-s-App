@@ -6,5 +6,6 @@ data class Subject(
     val name: String,
     val semester: String,
     val subjectCode: String,
-    val teacherId: Int
+    val teacherId: Int,
+    val section:String
 )
