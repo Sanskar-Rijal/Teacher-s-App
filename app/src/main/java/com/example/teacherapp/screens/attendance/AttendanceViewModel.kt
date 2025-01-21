@@ -25,7 +25,7 @@ class AttendanceViewModel @Inject constructor(private val repository: Get_Teache
 
     var item: getsubjects by mutableStateOf(getsubjects(subjects = emptyList(), success = false))
 
-    var isLoading: Boolean by mutableStateOf(false)
+    var isLoading: Boolean by mutableStateOf(true)
 
     //for making state for loading idle etc
     //private val _loading = MutableLiveData(false)

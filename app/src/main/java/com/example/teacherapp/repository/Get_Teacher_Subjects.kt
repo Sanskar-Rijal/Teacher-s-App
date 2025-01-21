@@ -12,10 +12,15 @@ class Get_Teacher_Subjects @Inject constructor(
     //getting availabe data from teachers that have added like subjects etc
     suspend fun getSubjects(): DataorException<getsubjects> {
         return try {
+
             DataorException.Loading(data = true)
+
             val response = getTeacher.getAddedData()
+
             Log.d("sangyog", "getSubjects: $response")
+
             DataorException.Success(data = response)
+
         }catch (ex:Exception){
             Log.d("sangyog", "getSubjects: ${ex.message}")
             DataorException.Error(message = ex.message.toString())

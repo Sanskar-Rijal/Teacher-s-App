@@ -11,37 +11,43 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
+import com.example.teacherapp.screens.LoginScreen.LoadingState
+import com.example.teacherapp.screens.attendance.AttendanceViewModel
+import com.example.teacherapp.screens.attendance.FloatingContent
 
 @Composable
-fun InternalMarksHomeScreen(navController: NavController = NavController(LocalContext.current)) {
+fun InternalMarksHomeScreen(navController: NavController = NavController(LocalContext.current),
+                            viewModel: AttendanceViewModel
+) {
+
+    val data = viewModel.item
+
+    val uiState = viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = null) {
+        viewModel.fetchSubjects()
+    }
+
     Scaffold(
         topBar = {
             AppBarbySans(
@@ -55,107 +61,44 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
         floatingActionButton = {
             FloatingContent {
                 //navigate to the add icon
-                navController.navigate(campusConnectScreen.AddInternalMarksScreen.name)
+                navController.navigate(campusConnectScreen.AddAttendanceScreen.name)
             }
         }
     ) { contentpadding ->
-        Box {
+        Image(
+            painter = painterResource(R.drawable.home_page_bg),
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = "background",
+            contentScale = ContentScale.FillBounds
+        )
 
-            Image(
-                painter = painterResource(R.drawable.home_page_bg),
-                modifier = Modifier.fillMaxSize(),
-                contentDescription = "background",
-                contentScale = ContentScale.FillBounds)
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentpadding),
+            color = Color.Transparent
+        ) {
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentpadding),
-                color = Color.Transparent){
+            //checking whether data is loading or not
+            if (uiState.value == LoadingState.LOADING) {
+                LoadingDialog()
+            } else {
                 Column(modifier = Modifier.padding(10.dp)) {
 
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top) {
-                        item {
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-                            CardView()
-
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        items(data.subjects){eachSubj->
+                            com.example.teacherapp.components.CardView(eachSubj) {
+                                //to be made
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-}
-
-//floating bottom below
-@Composable
-fun FloatingContent(onClick:(String)->Unit ){
-    FloatingActionButton(onClick={
-        onClick("")
-    },
-        shape = RoundedCornerShape(45.dp),
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-    ) {
-        Icon(Icons.Default.Add, contentDescription = "Add Icon", tint = MaterialTheme.colorScheme.onTertiaryContainer)
-    }
-}
-
-
-//to show subject name
-@Preview
-@Composable
-fun CardView(
-    size:Int=50,
-    title:String="hehehe",
-    onClick: () -> Unit={}
-){
-    Card(modifier = Modifier
-        .height(130.dp)
-        .fillMaxWidth()
-        .padding(5.dp)
-        .clickable {
-            onClick.invoke()
-        },
-        shape = RoundedCornerShape(10.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-    ){
-        Column(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center){
-
-            Text(
-                text = "C-Programming",
-                modifier = Modifier.padding(bottom = 5.dp),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                lineHeight = 23.sp,
-                letterSpacing = 0.5.sp
-            )
-            Text(
-                text = "BCT-078 AB",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color.LightGray,
-                textAlign = TextAlign.Center,
-                lineHeight = 23.sp
-            )
-
         }
     }
 }

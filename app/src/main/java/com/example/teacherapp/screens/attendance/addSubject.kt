@@ -1,8 +1,6 @@
-package com.example.teacherapp.screens.NotesScreen
+package com.example.teacherapp.screens.attendance
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,20 +24,23 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
+
 
 @Composable
-fun AddNotesScreen(navController: NavController = NavController(LocalContext.current),
-                   viewmodel: AttendanceViewModel_to_add_subj) {
+fun AddAttendanceScreen(navController: NavController,
+                        viewmodel:AttendanceViewModel_to_add_subj) {
+
     val uiState=viewmodel.state.collectAsState()
+
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             AppBarbySans(
-                title = "Add Notes",
+                title = "Add Subject",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
-                navController.navigate(campusConnectScreen.NotesHomeScreen.name)
+                navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
             }
         }
     ) { contentpadding ->
@@ -56,11 +57,13 @@ fun AddNotesScreen(navController: NavController = NavController(LocalContext.cur
                     .padding(contentpadding),
                 color = Color.Transparent) {
 
-                Column(modifier = Modifier.padding(10.dp)) {
+                Column(modifier = Modifier
+                    .padding(10.dp)) {
+
                     AddCourseScreen{faculty,semester,section,subjectcode->
                         viewmodel.addSubject(faculty,semester,section,subjectcode){
-                            Log.d("pravin", "inside navcontroller: ")
-                            navController.navigate(campusConnectScreen.NotesHomeScreen.name) //navigate to attendance Screen Instead
+
+                           navController.navigate(campusConnectScreen.AttendanceHomeScreen.name) //navigate to attendance Screen Instead
                         }
                     }
                     if(uiState.value== LoadingState.LOADING){
@@ -74,4 +77,5 @@ fun AddNotesScreen(navController: NavController = NavController(LocalContext.cur
 
     }
 }
+
 

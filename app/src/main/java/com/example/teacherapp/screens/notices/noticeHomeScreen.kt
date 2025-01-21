@@ -1,6 +1,5 @@
-package com.example.teacherapp.screens.NotesScreen
+package com.example.teacherapp.screens.notices
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,8 +32,9 @@ import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.AttendanceViewModel
 
 @Composable
-fun NotesHomeScreen(navController: NavController = NavController(LocalContext.current),
-                    viewModel: AttendanceViewModel) {
+fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.current),
+                    viewModel: AttendanceViewModel
+) {
     //getting data from viewmodel
     val data = viewModel.item
 
@@ -47,17 +47,17 @@ fun NotesHomeScreen(navController: NavController = NavController(LocalContext.cu
     Scaffold(
         topBar = {
             AppBarbySans(
-                title = "Notes",
+                title = "Notice",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
                 //when the back icon is pressed then
-                navController.navigate(campusConnectScreen.HomeScreen.name)
+                navController.popBackStack()
             }
         },
         floatingActionButton = {
             com.example.teacherapp.screens.attendance.FloatingContent{
                 //navigate to the add icon
-                navController.navigate(campusConnectScreen.AddAttendanceScreen.name)
+                navController.navigate(campusConnectScreen.NoticeScreen.name)
             }
         }
     ) { contentpadding ->
@@ -91,7 +91,7 @@ fun NotesHomeScreen(navController: NavController = NavController(LocalContext.cu
                         ) {
                             items(data.subjects){eachSubj->
                                 com.example.teacherapp.components.CardView(eachSubj) {
-                                   //to be made
+                                    //to be made
                                 }
                             }
                         }

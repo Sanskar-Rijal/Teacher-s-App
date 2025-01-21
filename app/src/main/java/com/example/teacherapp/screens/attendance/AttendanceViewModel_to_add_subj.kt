@@ -54,6 +54,7 @@ class AttendanceViewModel_to_add_subj @Inject constructor(
                             _state.value.message=response.message
                             onSuccess()
                         }
+                        _state.value = LoadingState.SUCCESS
                     }
                     else ->{
                         _state.value = LoadingState.FAILED

@@ -26,6 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.EnhancedEncryption
 import androidx.compose.material.icons.filled.HideSource
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Button
@@ -316,12 +317,12 @@ fun PasswordField(
 
             if(passwordvisibility.value){
                 IconButton(onClick ={passwordvisibility.value= !passwordvisibility.value} ) {
-                    Icon(imageVector = Icons.Default.HideSource, contentDescription = "icon")
+                    Icon(imageVector = Icons.Default.RemoveRedEye, contentDescription = "icon")
                 }
             }
             else{
                 IconButton(onClick = {passwordvisibility.value =!passwordvisibility.value}) {
-                    Icon(imageVector = Icons.Default.RemoveRedEye, contentDescription = "icon")
+                    Icon(imageVector = Icons.Default.EnhancedEncryption, contentDescription = "icon")
                 }
             }
         },

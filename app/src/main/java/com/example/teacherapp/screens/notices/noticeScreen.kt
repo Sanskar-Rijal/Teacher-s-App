@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -41,9 +42,6 @@ import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.sansButton
-import com.example.teacherapp.screens.attendance.AddCourseScreen
-import com.example.teacherapp.screens.attendance.DropdownMenuComponent
-import com.example.teacherapp.utils.sectionsMap
 
 @Preview
 @Composable
@@ -71,7 +69,9 @@ fun NoticeScreen(navController:NavController=NavController(LocalContext.current)
                     .padding(contentpadding),
                 color = Color.Transparent) {
 
-                Column(modifier = Modifier.padding(10.dp),
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
 
                     addNoticeField()
@@ -101,41 +101,43 @@ fun addNoticeField(){
         mutableStateOf("")
     }
 
-    val selectedSemester = remember{
-        mutableStateOf("")
-    }
-
-    val selectedSection = remember {
-        mutableStateOf("")
-    }
-
-    val selectedFaculty = remember {
-        mutableStateOf("")
-    }
+//    val selectedSemester = remember{
+//        mutableStateOf("")
+//    }
+//
+//    val selectedSection = remember {
+//        mutableStateOf("")
+//    }
+//
+//    val selectedFaculty = remember {
+//        mutableStateOf("")
+//    }
 
 
     val validNotice = rememberSaveable(selectedTitle.value,selectedDescription.value){
         selectedTitle.value.isNotEmpty() && selectedDescription.value.isNotEmpty() //if it's not empty it will be true
     }
 
-    val faculty = listOf("COMPUTER", "CIVIL")
+//    val faculty = listOf("COMPUTER", "CIVIL")
+//
+//    val sem = listOf("1", "2", "3", "4", "5", "6", "7", "8")
+//
+//    //subject id pass through lamda function from card which is clicked
+//
+//    val sections= remember(selectedFaculty.value) {
+//        sectionsMap[selectedFaculty.value]?.map {
+//            it.sec
+//        }?: listOf("Select faculty First")
+//    }
 
-    val sem = listOf("1", "2", "3", "4", "5", "6", "7", "8")
-
-    //subject id pass through lamda function from card which is clicked
-
-    val sections= remember(selectedFaculty) {
-        sectionsMap[selectedFaculty.value]?.map {
-            it.sec
-        }?: listOf("Select faculty First")
-    }
-
-    Column(modifier = Modifier.padding(10.dp),
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
         AddNotice(
             valueState = selectedTitle,
-            labelId = "Add a Notice",
+            labelId = "Title",
             enabled = true,
             keyboardType = KeyboardType.Unspecified,
             imeaction = ImeAction.Next,
@@ -145,7 +147,7 @@ fun addNoticeField(){
 
         AddNotice(
             valueState = selectedDescription,
-            labelId = "Add a Notice",
+            labelId = "Description",
             enabled = true,
             keyboardType = KeyboardType.Unspecified,
             imeaction = ImeAction.Done,
@@ -159,6 +161,8 @@ fun addNoticeField(){
             }
         )
 
+        /**
+
         DropdownMenuComponent(
             label = "Select Faculty",
             options = faculty,
@@ -166,7 +170,27 @@ fun addNoticeField(){
             onOptionSelected = { selectedFaculty.value = it }
         )
 
+        DropdownMenuComponent(
+            label = "Select Section",
+            options = sections,
+            selectedOption = selectedSection.value,
+            onOptionSelected = { selectedSection.value = it }
+        )
 
+        DropdownMenuComponent(
+            modifier =
+            if(selectedFaculty.value.isNotEmpty())
+                Modifier.height(300.dp)
+            else
+                Modifier,
+            label = "Select Semester",
+            options = sem,
+            selectedOption = selectedSemester.value,
+            onOptionSelected = { selectedSemester.value = it }
+        )
+
+        **/
+        //subject id kasri kasri pathauna paro hai ta
 
         //send Button
         sansButton(text ="Send") {
