@@ -15,6 +15,9 @@ import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
 import com.example.teacherapp.screens.attendance.AttendanceViewModel
 import com.example.teacherapp.screens.attendance.AttendanceViewModel_to_add_subj
+import com.example.teacherapp.screens.attendance.ChooseAttendanceScreen
+import com.example.teacherapp.screens.attendance.ShowAttendance
+import com.example.teacherapp.screens.attendance.TakeAttendance
 import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
@@ -57,6 +60,18 @@ fun CampusConnectNavigation() {
         composable(campusConnectScreen.AddAttendanceScreen.name){
             val AttendanceHomeScreenViewModel = hiltViewModel<AttendanceViewModel_to_add_subj>()
             AddAttendanceScreen(navController,AttendanceHomeScreenViewModel)
+        }
+
+        composable(campusConnectScreen.ChooseAttendanceScreen.name){
+            ChooseAttendanceScreen(navController)
+        }
+
+        composable(campusConnectScreen.TakeAttendanceScreen.name){
+            TakeAttendance(navController)
+        }
+
+        composable(campusConnectScreen.ShowAttendanceScreen.name){
+            ShowAttendance(navController)
         }
 
         composable(campusConnectScreen.NoticeScreen.name){
