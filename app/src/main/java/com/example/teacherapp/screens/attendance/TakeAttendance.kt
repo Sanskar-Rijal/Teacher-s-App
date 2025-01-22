@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,7 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,27 +50,46 @@ import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
+import com.example.teacherapp.model.createAttendance.AttendanceData
+import com.example.teacherapp.model.createAttendance.createAttendanceRequest
 import com.example.teacherapp.model.getAddedData.Subject
-import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.model.getstudentbysec.StudentX
 import com.example.teacherapp.model.getstudentbysec.studentResponse
+import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
+import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 
 @Composable
 fun TakeAttendance(navController: NavController=NavController(LocalContext.current),
-                   viewmodel: GetStudentBySection_Viewmodel= hiltViewModel(),
-                   subject: Subject?
+                   getstudent: GetStudentBySection_Viewmodel= hiltViewModel(),
+                   subject: Subject?, createAttendace:CreateAttendance_viewModel
 ) {
 
 
-    val data: studentResponse = viewmodel.item
+    val data: studentResponse = getstudent.item
 
-    val uiState = viewmodel.state.collectAsState()
+    val uiState = getstudent.state.collectAsState()
+
+    val createState= createAttendace.state.collectAsState()
+
+    //for attendance to mark student present or absent
+    val attendanceData = remember {
+        mutableStateListOf<AttendanceData>()
+    }
+
+
+    //to pass current date
+    val currentDate = remember {
+        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    }
 
     LaunchedEffect(key1 = null) {
         if (subject != null) {
-            viewmodel.getStudentBySection(
+            getstudent.getStudentBySection(
                 faculty = subject.faculty,
                 semester = subject.semester,
                 section = subject.section
@@ -114,7 +133,17 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             items(data.students) { student->
-                                takeAtt(student)
+                                takeAtt(student){id,present->
+
+                                    val existing = attendanceData.find {
+                                        it.studentId == id
+                                    }
+                                    if (existing != null) {
+                                        attendanceData.remove(existing)
+                                    }
+
+                                    attendanceData.add(AttendanceData(present = present, studentId = id))
+                                }
                             }
                             item {
                                 sansButton(
@@ -122,9 +151,25 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                                     text = "Save"
                                 ) {
                                     //when button is pressed then data is to be sent to backend
+
+                                    val attendanceRequest = createAttendanceRequest(
+                                        attendanceData = attendanceData,
+                                        date = currentDate,
+                                        subjectId = subject!!.id
+                                    )
+                                    Log.d("saurav", "${uiState.value} ")
+
+                                    createAttendace.createAttendance(
+                                        attendanceRequest =  attendanceRequest
+                                    ){
+                                        navController.navigate(campusConnectScreen.HomeScreen.name)
+                                    }
                                 }
+
                             }
                         }
+                        if(createState.value == LoadingState.LOADING)
+                            LoadingDialog()
                     }
                 }
             }
@@ -137,7 +182,7 @@ fun takeAtt(
     student:StudentX,
     size:Int=50,
     title:String="Sanskar",
-    onClick: () -> Unit={}
+    onClick: (Int,Boolean) -> Unit
 ) {
 
     //mutable state for checking whether the card has been clicked or not
@@ -152,8 +197,7 @@ fun takeAtt(
 
                 isChecked =
                     !isChecked //if the card is clicked then also the checkbox should be clicked
-
-                onClick.invoke()
+                onClick(student.id, isChecked)
             },
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),

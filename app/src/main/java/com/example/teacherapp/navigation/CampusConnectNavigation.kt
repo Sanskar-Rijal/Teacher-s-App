@@ -18,6 +18,7 @@ import com.example.teacherapp.screens.NotesScreen.AddNotesScreen
 import com.example.teacherapp.screens.NotesScreen.NotesHomeScreen
 import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
+import com.example.teacherapp.screens.attendance.CreateAttendance_viewModel
 import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
 import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
 import com.example.teacherapp.screens.attendance.ViewModel_to_add_subj
@@ -83,6 +84,8 @@ fun CampusConnectNavigation() {
 
             val viewmodel:GetStudentBySection_Viewmodel= hiltViewModel<GetStudentBySection_Viewmodel>()
 
+            val viewmodel2:CreateAttendance_viewModel= hiltViewModel<CreateAttendance_viewModel>()
+
             BackStackEntry.arguments?.getString("details").let {details->
 
                 val subjectDecode = details?.let {
@@ -90,7 +93,10 @@ fun CampusConnectNavigation() {
                 }
                 Log.d("akriti", "from navigation : $subjectDecode ")
                 if(details != null){
-                    TakeAttendance(navController,viewmodel,subjectDecode)
+                    TakeAttendance(navController = navController,
+                        getstudent = viewmodel,
+                        subject = subjectDecode,
+                        createAttendace = viewmodel2)
                 }
             }
 

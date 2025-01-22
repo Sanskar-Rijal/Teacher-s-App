@@ -7,4 +7,5 @@ object Constants {
     const val get_added_data="teacher/subjects"
     const val add_subject="teacher/assign"
     const val get_student_by_sec="details/section"
+    const val create_attendance="attendence/create-attendence"
     }

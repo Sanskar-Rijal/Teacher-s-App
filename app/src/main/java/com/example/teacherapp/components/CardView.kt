@@ -1,6 +1,5 @@
 package com.example.teacherapp.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +30,7 @@ import com.example.teacherapp.model.getAddedData.Subject
 
 //to show subject name
 
+
 @Composable
 fun CardView(
     eachsubj: Subject,
@@ -38,8 +38,17 @@ fun CardView(
     title:String="hehehe",
     onClick: () -> Unit={}
 ){
+//    val eachsubj:Subject=Subject(
+//        faculty = "faculty",
+//        id = 1,
+//        name = "name",
+//        semester = "semester",
+//        subjectCode = "subjectCode",
+//        teacherId = 1,
+//        section = "section"
+//    )
     Card(modifier = Modifier
-        .height(130.dp)
+        .height(105.dp)
         .fillMaxWidth()
         .padding(5.dp)
         .clickable {
@@ -50,8 +59,8 @@ fun CardView(
         colors = CardDefaults.cardColors(containerColor = Color.White),
     ){
         Column(modifier = Modifier
-            .padding(10.dp)
-            .fillMaxSize(),
+            .fillMaxWidth()
+            .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
 
@@ -65,25 +74,24 @@ fun CardView(
                 lineHeight = 23.sp,
                 letterSpacing = 0.5.sp
             )
-            Log.d("sagar", "$eachsubj ")
+
             Text(
-                text = "${eachsubj.faculty?:"No Data"} ${eachsubj.section?:"No Data"} / sem-${eachsubj.semester?:"No Data}"}",
+                text = "${eachsubj.faculty?:"No Data"} ${eachsubj.section?:"No Data"}",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
                 lineHeight = 23.sp
             )
+        }
+        Row(modifier = Modifier
+            .fillMaxSize(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom) {
 
-            Row(modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom) {
 
-
-                roundedButton(label = " ${eachsubj.semester} semester"
-                    , radius = 70)
-
-            }
+            roundedButton(label = " ${eachsubj.semester} semester"
+                , radius = 70)
 
         }
     }
@@ -96,18 +104,15 @@ fun CardView(
 fun roundedButton(
     label:String="Reading",
     radius:Int=30,
-    onPress:()->Unit ={}
 ){
     Surface(modifier = Modifier
         .clip(RoundedCornerShape(bottomEndPercent = 40,
             topStartPercent = radius)),
-        color = MaterialTheme.colorScheme.tertiaryContainer){
+        color = Color(0xFF1490CF)
+    ){
         Column(modifier = Modifier
             .width(90.dp)
-            .heightIn(40.dp)
-            .clickable {
-                onPress.invoke()
-            },
+            .heightIn(40.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) { //heightin means it will not be smaller
@@ -123,7 +128,7 @@ fun roundedButton(
              * If the content naturally fits within the range, it will take its natural height.
              */
             Text(text = label,
-                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                color = Color.White,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.bodyMedium
             )

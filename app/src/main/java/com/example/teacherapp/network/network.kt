@@ -2,6 +2,8 @@ package com.example.teacherapp.network
 
 import com.example.teacherapp.model.addSubject.AddSubjRequest
 import com.example.teacherapp.model.addSubject.AddsubjResponse
+import com.example.teacherapp.model.createAttendance.createAttendanceRequest
+import com.example.teacherapp.model.createAttendance.createAttendanceResponse
 import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.model.getstudentbysec.studentRequest
 import com.example.teacherapp.model.getstudentbysec.studentResponse
@@ -31,7 +33,16 @@ interface network {
     suspend fun addSubject(
         @Body addSubjRequest: AddSubjRequest):AddsubjResponse
 
+    //getting all the students by section
     @POST(value = Constants.get_student_by_sec)
     suspend fun getStudentBySec(
         @Body studentRequest: studentRequest):studentResponse
+
+    //creating attendance i mean taking attendance
+    @POST(value=Constants.create_attendance)
+    suspend fun createAttendance(
+        @Body createAttendanceRequest: createAttendanceRequest):createAttendanceResponse
+
+
+
 }
