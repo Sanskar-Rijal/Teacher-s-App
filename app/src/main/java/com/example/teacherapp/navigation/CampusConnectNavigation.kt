@@ -29,6 +29,7 @@ import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
+import com.example.teacherapp.screens.notices.NoticeViewmodel
 import kotlinx.serialization.json.Json
 
 @Composable
@@ -135,8 +136,25 @@ fun CampusConnectNavigation() {
             NoticeHomeScreen(navController,AttendanceViewModel)
         }
 
-        composable(campusConnectScreen.NoticeScreen.name){
-            NoticeScreen(navController)
+        val route3=campusConnectScreen.NoticeScreen.name
+        composable("$route3/{details}",
+            arguments = listOf(
+                navArgument(name ="details"){
+                    type=NavType.StringType })) { BackStackEntry ->
+
+            val noticeViewmodel: NoticeViewmodel = hiltViewModel<NoticeViewmodel>()
+
+            BackStackEntry.arguments?.getString("details").let { details ->
+
+                val subjectDecode = details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+                if(details != null) {
+                    NoticeScreen(navController=navController,
+                        viewmodel=noticeViewmodel,
+                        details=subjectDecode)
+                }
+            }
         }
 
         composable(campusConnectScreen.NotesHomeScreen.name){

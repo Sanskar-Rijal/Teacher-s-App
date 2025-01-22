@@ -120,15 +120,11 @@ fun Showatt(
     data:Attendance,
     size:Int=50,
     title:String="sans",
-    onClick: () -> Unit={}
 ){
     Card(modifier = Modifier
         .height(79.dp)
         .fillMaxWidth()
-        .padding(5.dp)
-        .clickable {
-            onClick.invoke()
-        },
+        .padding(5.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),

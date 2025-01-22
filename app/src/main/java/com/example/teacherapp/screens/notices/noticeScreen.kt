@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,11 +42,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
+import com.example.teacherapp.model.getAddedData.Subject
+import com.example.teacherapp.navigation.campusConnectScreen
+import com.example.teacherapp.screens.LoginScreen.LoadingState
 
-@Preview
+
 @Composable
-fun NoticeScreen(navController:NavController=NavController(LocalContext.current)) {
+fun NoticeScreen(navController:NavController=NavController(LocalContext.current),
+                 viewmodel: NoticeViewmodel,
+                 details:Subject?
+) {
+    val uiState = viewmodel.state.collectAsState()
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             AppBarbySans(
@@ -73,9 +85,22 @@ fun NoticeScreen(navController:NavController=NavController(LocalContext.current)
                     .fillMaxSize()
                     .padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-
-                    addNoticeField()
-
+                    addNoticeField(){title,description->
+                        viewmodel.sendNotice(
+                            description = description,
+                            faculty = details?.faculty?:"COMPUTER",
+                            section = details?.section?:"CD",
+                            semester = details?.semester?:"6",
+                            subjectId = details?.id?:0,
+                            title = title
+                        ){
+                            Toast.makeText(context, "Notice Sent Successfully", Toast.LENGTH_SHORT).show()
+                            navController.navigate(campusConnectScreen.HomeScreen.name)
+                        }
+                    }
+                }
+                if(uiState.value== LoadingState.LOADING){
+                    LoadingDialog()
                 }
 
             }
@@ -85,7 +110,9 @@ fun NoticeScreen(navController:NavController=NavController(LocalContext.current)
 }
 
 @Composable
-fun addNoticeField(){
+fun addNoticeField(
+    onClick:(String,String)->Unit
+){
 
     val context = LocalContext.current
 
@@ -197,6 +224,8 @@ fun addNoticeField(){
             //now send datato viewmodel for backend
             if(!validNotice){
                 Toast.makeText(context, "Add a Notice First", Toast.LENGTH_SHORT).show()
+            }else{
+                onClick(selectedTitle.value,selectedDescription.value)
             }
         }
     }

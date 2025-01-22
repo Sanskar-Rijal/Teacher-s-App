@@ -1,5 +1,7 @@
 package com.example.teacherapp.network
 
+import com.example.teacherapp.model.Notice.NoticeRequest
+import com.example.teacherapp.model.Notice.NoticeResponse
 import com.example.teacherapp.model.addSubject.AddSubjRequest
 import com.example.teacherapp.model.addSubject.AddsubjResponse
 import com.example.teacherapp.model.createAttendance.createAttendanceRequest
@@ -50,6 +52,12 @@ interface network {
     @POST(value=Constants.show_attendance)
     suspend fun ShowAttendance(
         @Body showAttendanceRequest: showAttendanceRequest):showAttendanceResponse
+
+
+    //for sending Notice
+    @POST(value = Constants.send_notice)
+    suspend fun sendNotice(
+        @Body noticeRequest: NoticeRequest):NoticeResponse
 
 
 
