@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -119,6 +120,8 @@ dependencies {
     //for status bar
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
+    //for serialization i.e to pass class as object between screens
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
 }
 

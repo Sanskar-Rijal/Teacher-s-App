@@ -58,23 +58,26 @@ import com.example.teacherapp.screens.LoginScreen.LoadingState
 
 
 @Composable
-fun TakeAttendance(navController: NavController=NavController(LocalContext.current)
-,viewmodel: GetStudentBySection_Viewmodel= hiltViewModel()
+fun TakeAttendance(navController: NavController=NavController(LocalContext.current),
+                   viewmodel: GetStudentBySection_Viewmodel= hiltViewModel(),
+                   subject: Subject?
 ) {
+
 
     val data: studentResponse = viewmodel.item
 
     val uiState = viewmodel.state.collectAsState()
 
     LaunchedEffect(key1 = null) {
-        viewmodel.getStudentBySection(
-            faculty = "COMPUTER",
-            semester = "6",
-            section = "CD"
-        )
+        if (subject != null) {
+            viewmodel.getStudentBySection(
+                faculty = subject.faculty,
+                semester = subject.semester,
+                section = subject.section
+            )
+        }
     }
 
-    Log.d("Smriti", "kei na kei ta ho : $data ")
 
     Scaffold(
         topBar = {

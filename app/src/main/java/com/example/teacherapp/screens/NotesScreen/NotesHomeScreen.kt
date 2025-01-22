@@ -85,7 +85,7 @@ fun NotesHomeScreen(navController: NavController = NavController(LocalContext.cu
                         ) {
                             items(data.subjects){eachSubj->
                                 com.example.teacherapp.components.CardView(eachSubj) {
-                                   //to be made
+
                                 }
                             }
                         }

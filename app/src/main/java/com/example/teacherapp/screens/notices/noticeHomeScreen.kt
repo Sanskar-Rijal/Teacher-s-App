@@ -49,12 +49,6 @@ fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.c
                 //when the back icon is pressed then
                 navController.popBackStack()
             }
-        },
-        floatingActionButton = {
-            com.example.teacherapp.screens.attendance.FloatingContent{
-                //navigate to the add icon
-                navController.navigate(campusConnectScreen.NoticeScreen.name)
-            }
         }
     ) { contentpadding ->
         Box {
@@ -88,6 +82,7 @@ fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.c
                             items(data.subjects){eachSubj->
                                 com.example.teacherapp.components.CardView(eachSubj) {
                                     //to be made
+                                    navController.navigate(campusConnectScreen.NoticeScreen.name)
                                 }
                             }
                         }

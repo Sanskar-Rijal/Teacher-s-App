@@ -49,6 +49,8 @@ import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun AttendanceHomeScreen(navController: NavController= NavController(LocalContext.current),
@@ -66,8 +68,6 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
     var selectedSubject:Subject? by remember {
         mutableStateOf(null)
     }
-
-    Log.d("sujan", "$data: ")
 
     Scaffold(
         topBar = {
@@ -129,8 +129,11 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                             Alert(
                                 subjectName = selectedSubject?.name?:"No Subject",
                                 onTakeAttendance = {
+                                    //passing subject name and all details to another screen
+                                    val subjectJson = Json.encodeToString(selectedSubject)
                                     showDialouge=false
-                                    navController.navigate(campusConnectScreen.TakeAttendanceScreen.name)
+
+                                    navController.navigate(campusConnectScreen.TakeAttendanceScreen.name+"/$subjectJson")
                                 },
                                 onShowAttendance = {
                                     showDialouge=false

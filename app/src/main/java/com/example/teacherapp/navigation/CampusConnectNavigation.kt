@@ -1,11 +1,16 @@
 package com.example.teacherapp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.fragment.app.FragmentManager.BackStackEntry
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.screens.HomeScreen.HomeScreen
 import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
@@ -22,6 +27,7 @@ import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
+import kotlinx.serialization.json.Json
 
 @Composable
 fun CampusConnectNavigation() {
@@ -66,9 +72,28 @@ fun CampusConnectNavigation() {
         }
 
 
-        composable(campusConnectScreen.TakeAttendanceScreen.name){
+        //for take attendance we have to pass 3 things to backend i.e faculty,semester and section
+        //so we pass these 3 things from attendance homeScreen
+        val route1=campusConnectScreen.TakeAttendanceScreen.name
+        composable("$route1/{details}",
+            arguments = listOf(
+                navArgument(name ="details"){
+                    type=NavType.StringType
+                })){ BackStackEntry->
+
             val viewmodel:GetStudentBySection_Viewmodel= hiltViewModel<GetStudentBySection_Viewmodel>()
-            TakeAttendance(navController,viewmodel)
+
+            BackStackEntry.arguments?.getString("details").let {details->
+
+                val subjectDecode = details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+                Log.d("akriti", "from navigation : $subjectDecode ")
+                if(details != null){
+                    TakeAttendance(navController,viewmodel,subjectDecode)
+                }
+            }
+
         }
 
         composable(campusConnectScreen.ShowAttendanceScreen.name){
