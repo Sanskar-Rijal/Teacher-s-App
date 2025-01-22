@@ -8,4 +8,5 @@ object Constants {
     const val add_subject="teacher/assign"
     const val get_student_by_sec="details/section"
     const val create_attendance="attendence/create-attendence"
+    const val show_attendance="attendence/details"
     }

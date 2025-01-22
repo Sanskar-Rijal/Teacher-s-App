@@ -24,6 +24,7 @@ import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
 import com.example.teacherapp.screens.attendance.ViewModel_to_add_subj
 import com.example.teacherapp.screens.attendance.ShowAttendance
 import com.example.teacherapp.screens.attendance.TakeAttendance
+import com.example.teacherapp.screens.attendance.showAttendanceViewmodel
 import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
@@ -102,8 +103,30 @@ fun CampusConnectNavigation() {
 
         }
 
-        composable(campusConnectScreen.ShowAttendanceScreen.name){
-            ShowAttendance(navController)
+
+        val route2=campusConnectScreen.ShowAttendanceScreen.name
+        composable("$route2/{details}",
+            arguments = listOf(
+                navArgument(name ="details"){
+                    type=NavType.StringType
+                })) { BackStackEntry ->
+
+            val showAttendanceViewModel = hiltViewModel<showAttendanceViewmodel>()
+
+            BackStackEntry.arguments?.getString("details").let { details ->
+
+                val subjectDecode = details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+
+                    if(details != null){
+                        ShowAttendance(navController = navController,
+                           showAttendanceViewmodel =  showAttendanceViewModel,
+                            subject= subjectDecode
+                            )
+                    }
+
+                }
         }
 
         composable(campusConnectScreen.NoticeHomeScreen.name){

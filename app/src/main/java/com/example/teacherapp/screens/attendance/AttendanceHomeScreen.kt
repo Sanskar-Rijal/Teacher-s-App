@@ -136,8 +136,10 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                                     navController.navigate(campusConnectScreen.TakeAttendanceScreen.name+"/$subjectJson")
                                 },
                                 onShowAttendance = {
+                                    //passing subject name and all details to another screen
+                                    val subjectJson = Json.encodeToString(selectedSubject)
                                     showDialouge=false
-                                    navController.navigate(campusConnectScreen.ShowAttendanceScreen.name)
+                                    navController.navigate(campusConnectScreen.ShowAttendanceScreen.name+"/$subjectJson")
                                 },
                                 onTapOutside = {
                                     showDialouge = false

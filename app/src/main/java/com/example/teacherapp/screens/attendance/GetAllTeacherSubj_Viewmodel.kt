@@ -41,7 +41,7 @@ class GetAllTeacherSubj_Viewmodel @Inject constructor(private val repository: Ge
 
 //for fetching the already added Subjects
     fun fetchSubjects() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             _state.value = LoadingState.LOADING
             //loginResponse.value = repository.loginTeacher(email, password)
             try {
@@ -62,7 +62,6 @@ class GetAllTeacherSubj_Viewmodel @Inject constructor(private val repository: Ge
                     is DataorException.Error -> {
                         _state.value = LoadingState.FAILED
                         _state.value.message = response.message
-                        Log.d("april", "error: ${response.message} ")
                         isLoading = false
                     }
 

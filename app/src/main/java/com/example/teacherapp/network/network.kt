@@ -9,6 +9,8 @@ import com.example.teacherapp.model.getstudentbysec.studentRequest
 import com.example.teacherapp.model.getstudentbysec.studentResponse
 import com.example.teacherapp.model.login.LoginRequest
 import com.example.teacherapp.model.login.LoginResponse
+import com.example.teacherapp.model.showAttendance.showAttendanceRequest
+import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.utils.Constants
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -42,6 +44,12 @@ interface network {
     @POST(value=Constants.create_attendance)
     suspend fun createAttendance(
         @Body createAttendanceRequest: createAttendanceRequest):createAttendanceResponse
+
+
+    //for showing attendance
+    @POST(value=Constants.show_attendance)
+    suspend fun ShowAttendance(
+        @Body showAttendanceRequest: showAttendanceRequest):showAttendanceResponse
 
 
 
