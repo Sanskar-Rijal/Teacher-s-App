@@ -11,4 +11,5 @@ object Constants {
     const val show_attendance="attendence/details"
     const val send_notice="notice/add"
     const val add_notes="notes/add"
+    const val add_internal_marks="marks/add"
     }

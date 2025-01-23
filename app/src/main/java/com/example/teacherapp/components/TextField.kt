@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AddNotice(modifier: Modifier = Modifier,
+fun AddNotice(modifier: Modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp),
               valueState: MutableState<String>,
               labelId:String="Email",
               enabled:Boolean=true,
@@ -39,7 +39,6 @@ fun AddNotice(modifier: Modifier = Modifier,
         textStyle = TextStyle(fontSize = 19.sp,
             color = MaterialTheme.colorScheme.onBackground),
         modifier = modifier
-            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
         enabled=enabled,
         shape = RoundedCornerShape(15.dp),

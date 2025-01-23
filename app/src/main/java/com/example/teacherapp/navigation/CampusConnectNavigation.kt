@@ -28,6 +28,8 @@ import com.example.teacherapp.screens.attendance.ShowAttendance
 import com.example.teacherapp.screens.attendance.TakeAttendance
 import com.example.teacherapp.screens.attendance.showAttendanceViewmodel
 import com.example.teacherapp.screens.internalmarks.AddInternalMarks
+import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel
+import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel_Factory
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.internalmarks.giveinternalmarks
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
@@ -222,6 +224,8 @@ fun CampusConnectNavigation() {
 
             val viewmodel:GetStudentBySection_Viewmodel= hiltViewModel<GetStudentBySection_Viewmodel>()
 
+            val addInternalMarksViewmodel:AddInternalMarksViewmodel = hiltViewModel<AddInternalMarksViewmodel>()
+
             BackStackEntry.arguments?.getString("details").let {details->
 
                 val subjectDecode= details?.let {
@@ -231,14 +235,12 @@ fun CampusConnectNavigation() {
                 if(details !=null){
                     giveinternalmarks(navController = navController,
                         getstudent =viewmodel ,
-                        subject = subjectDecode)
+                        subject = subjectDecode,
+                        addInternalMarksViewmodel = addInternalMarksViewmodel)
                 }
 
             }
         }
-
-
-
 
     }
 

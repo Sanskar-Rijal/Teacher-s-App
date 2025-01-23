@@ -1,5 +1,7 @@
 package com.example.teacherapp.network
 
+import com.example.teacherapp.model.AddInternalMarks.InternalMarksRequest
+import com.example.teacherapp.model.AddInternalMarks.InternalMarksResponse
 import com.example.teacherapp.model.Notice.NoticeRequest
 import com.example.teacherapp.model.Notice.NoticeResponse
 import com.example.teacherapp.model.addSubject.AddSubjRequest
@@ -76,5 +78,12 @@ interface network {
         @Part("subjectId") subjectId: RequestBody,
         @Part file: MultipartBody.Part
     ): NoteResponse
+
+
+    //function to add internal Marks
+    @POST(value = Constants.add_internal_marks)
+    suspend fun addInternalMarks(
+        @Body addInternalMarksRequest: InternalMarksRequest
+    ): InternalMarksResponse
 
 }

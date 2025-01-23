@@ -42,7 +42,6 @@ import com.example.teacherapp.components.sansButton
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.notices.addNoticeField
 
 
 @Composable
@@ -80,6 +79,7 @@ fun SelectNoteScreen(
                 ) {
                     Toast.makeText(context, "Note uploaded successfully!", Toast.LENGTH_SHORT)
                         .show()
+                    navController.navigate(campusConnectScreen.HomeScreen.name)
                 }
             }
         }
@@ -119,7 +119,9 @@ fun SelectNoteScreen(
                     // Show loading state
                     when (loadingState) {
                         LoadingState.LOADING -> LoadingDialog()
-                        LoadingState.SUCCESS -> Toast.makeText(context, "Notes Added Successfully", Toast.LENGTH_SHORT).show()
+                        LoadingState.SUCCESS -> {
+                            //Toast.makeText(context, "Notes Added Successfully", Toast.LENGTH_SHORT).show()
+                        }
                         LoadingState.FAILED -> Toast.makeText(context, "Upload Failed. Please try again", Toast.LENGTH_SHORT).show()
                         else -> Unit
                     }
@@ -129,7 +131,6 @@ fun SelectNoteScreen(
                         selectedTitle.value = it
                         keyboardController?.hide()
                         filePickerLauncher.launch(arrayOf("application/pdf"))
-
                     }
                 }
             }

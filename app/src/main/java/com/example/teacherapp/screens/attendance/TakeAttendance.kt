@@ -197,9 +197,7 @@ fun takeAtt(
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-
-                isChecked =
-                    !isChecked //if the card is clicked then also the checkbox should be clicked
+                isChecked = !isChecked //if the card is clicked then also the checkbox should be clicked
                 onClick(student.id, isChecked)
             },
         shape = RoundedCornerShape(10.dp),
