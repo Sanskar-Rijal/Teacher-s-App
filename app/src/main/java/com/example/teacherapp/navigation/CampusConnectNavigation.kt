@@ -172,7 +172,10 @@ fun CampusConnectNavigation() {
         composable(campusConnectScreen.InternalMarksHomeScreen.name){
             //viewmodel to show all subject of teacher
             val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
-            InternalMarksHomeScreen(navController,AttendanceViewModel)
+
+            InternalMarksHomeScreen(
+                navController=navController,
+                viewModel = AttendanceViewModel)
         }
 
         composable(campusConnectScreen.AddInternalMarksScreen.name){

@@ -1,5 +1,6 @@
 package com.example.teacherapp.screens.attendance
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,7 @@ fun AddAttendanceScreen(navController: NavController,
     Scaffold(
         topBar = {
             AppBarbySans(
-                title = "Add Subject",
+                title = "Add Attendance",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
                 navController.popBackStack()
@@ -62,7 +63,7 @@ fun AddAttendanceScreen(navController: NavController,
 
                     AddCourseScreen{faculty,semester,section,subjectcode->
                         viewmodel.addSubject(faculty,semester,section,subjectcode){
-
+                            Toast.makeText(context, "Subject Added Successfully", Toast.LENGTH_SHORT).show()
                            navController.navigate(campusConnectScreen.AttendanceHomeScreen.name) //navigate to attendance Screen Instead
                         }
                     }

@@ -1,4 +1,4 @@
-package com.example.teacherapp.screens.attendance
+package com.example.teacherapp.screens.internalmarks
 
 import android.util.Log
 import android.widget.Toast
@@ -56,18 +56,16 @@ import com.example.teacherapp.model.createAttendance.createAttendanceRequest
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.model.getstudentbysec.StudentX
 import com.example.teacherapp.model.getstudentbysec.studentResponse
-import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import java.time.Instant
+import com.example.teacherapp.screens.attendance.CreateAttendance_viewModel
+import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Date
-
 
 @Composable
-fun TakeAttendance(navController: NavController=NavController(LocalContext.current),
-                   getstudent: GetStudentBySection_Viewmodel= hiltViewModel(),
-                   subject: Subject?, createAttendace:CreateAttendance_viewModel
+fun giveinternalmarks(navController: NavController = NavController(LocalContext.current),
+                   getstudent: GetStudentBySection_Viewmodel = hiltViewModel(),
+                   subject: Subject?
 ) {
     val context= LocalContext.current
 
@@ -75,7 +73,6 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 
     val uiState = getstudent.state.collectAsState()
 
-    val createState= createAttendace.state.collectAsState()
 
     //for attendance to mark student present or absent
     val attendanceData = remember {
@@ -160,19 +157,12 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                                     )
                                     Log.d("saurav", "${uiState.value} ")
 
-                                    createAttendace.createAttendance(
-                                        attendanceRequest =  attendanceRequest
-                                    ){
-                                        Toast.makeText(context,"Attendance Taken Successfully",Toast.LENGTH_SHORT).show()
-//                                        navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
-                                        navController.popBackStack()
-                                    }
+
                                 }
 
                             }
                         }
-                        if(createState.value == LoadingState.LOADING)
-                            LoadingDialog()
+
                     }
                 }
             }
@@ -182,7 +172,7 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 
 @Composable
 fun takeAtt(
-    student:StudentX,
+    student: StudentX,
     size:Int=50,
     title:String="Sanskar",
     onClick: (Int,Boolean) -> Unit

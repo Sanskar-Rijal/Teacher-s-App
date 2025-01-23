@@ -30,6 +30,7 @@ import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
 import com.example.teacherapp.screens.attendance.FloatingContent
+import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
 
 @Composable
 fun InternalMarksHomeScreen(navController: NavController = NavController(LocalContext.current),
@@ -39,6 +40,7 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
     val data = viewModel.item
 
     val uiState = viewModel.state.collectAsState()
+
 
     LaunchedEffect(key1 = null) {
         viewModel.fetchSubjects()
