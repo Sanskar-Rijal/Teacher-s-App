@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.components.Alert
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.CardView
 import com.example.teacherapp.components.LoadingDialog
@@ -127,15 +128,17 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
 
                         if(showDialouge) {
                             Alert(
+                                title1 = "Take Attendance",
+                                title2 = "Show Attendance",
                                 subjectName = selectedSubject?.name?:"No Subject",
-                                onTakeAttendance = {
+                                onAdd = {
                                     //passing subject name and all details to another screen
                                     val subjectJson = Json.encodeToString(selectedSubject)
                                     showDialouge=false
 
                                     navController.navigate(campusConnectScreen.TakeAttendanceScreen.name+"/$subjectJson")
                                 },
-                                onShowAttendance = {
+                                onShow = {
                                     //passing subject name and all details to another screen
                                     val subjectJson = Json.encodeToString(selectedSubject)
                                     showDialouge=false
@@ -146,6 +149,7 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                                 }
                             )
                         }
+
                     }
                 }
             }
@@ -168,56 +172,3 @@ fun FloatingContent(onClick:(String)->Unit ){
 
 
 
-@Preview
-@Composable
-fun Alert(
-    subjectName:String="Math",
-    onTakeAttendance:()->Unit={},
-    onShowAttendance:()->Unit={},
-    onTapOutside:()->Unit={}
-){
-    AlertDialog(
-        title = {
-            Text(text = subjectName,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis)
-        },
-        text = {
-            Text(text = "What would you like to do?",
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center
-            )
-        },
-        onDismissRequest = {
-            onTapOutside()
-        },
-        confirmButton = {
-            TextButton(
-                colors = ButtonDefaults.buttonColors(Color(0xFF1490CF)),
-                onClick = {
-                    //to do when user Clicks take Attendance
-                    onShowAttendance()
-                }) {
-                Text(text = "Show Attendance",
-                    color = Color.White
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(
-                colors = ButtonDefaults.buttonColors(Color(0xFF1490CF)),
-                onClick = {
-                    //to do something when user clicks take attendance
-                    onTakeAttendance()
-                }) {
-                Text("Take Attendance",
-                    color = Color.White
-                )
-            }
-        },
-        containerColor = Color(0xFFbde0fe)
-    )
-}

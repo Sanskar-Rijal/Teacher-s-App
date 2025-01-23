@@ -29,6 +29,7 @@ import com.example.teacherapp.screens.attendance.TakeAttendance
 import com.example.teacherapp.screens.attendance.showAttendanceViewmodel
 import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
+import com.example.teacherapp.screens.internalmarks.giveinternalmarks
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
 import com.example.teacherapp.screens.notices.NoticeViewmodel
@@ -164,6 +165,7 @@ fun CampusConnectNavigation() {
             val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             NotesHomeScreen(navController,AttendanceViewModel)
         }
+
         val route4=campusConnectScreen.SelectNoteScreen.name
         composable("$route4/{details}",
             arguments = listOf(
@@ -211,6 +213,29 @@ fun CampusConnectNavigation() {
             AddInternalMarks(navController,addNewsubj)
         }
 
+        val route5=campusConnectScreen.GiveInternalMarksScreen.name
+        composable("$route5/{details}",
+            arguments = listOf(
+                navArgument(name="details"){
+                    type=NavType.StringType
+                })){BackStackEntry->
+
+            val viewmodel:GetStudentBySection_Viewmodel= hiltViewModel<GetStudentBySection_Viewmodel>()
+
+            BackStackEntry.arguments?.getString("details").let {details->
+
+                val subjectDecode= details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+
+                if(details !=null){
+                    giveinternalmarks(navController = navController,
+                        getstudent =viewmodel ,
+                        subject = subjectDecode)
+                }
+
+            }
+        }
 
 
 

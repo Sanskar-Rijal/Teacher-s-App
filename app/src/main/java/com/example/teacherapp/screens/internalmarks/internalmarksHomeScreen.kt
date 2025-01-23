@@ -15,6 +15,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,13 +28,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.components.Alert
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.CardView
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
 import com.example.teacherapp.screens.attendance.FloatingContent
-import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun InternalMarksHomeScreen(navController: NavController = NavController(LocalContext.current),
@@ -41,9 +49,12 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
 
     val uiState = viewModel.state.collectAsState()
 
+    var selectedSubject: Subject? by remember {
+        mutableStateOf(null)
+    }
 
-    LaunchedEffect(key1 = null) {
-        viewModel.fetchSubjects()
+    var showDialouge by remember {
+        mutableStateOf(false)
     }
 
     Scaffold(
@@ -90,10 +101,37 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
                         verticalArrangement = Arrangement.Top
                     ) {
                         items(data.subjects){eachSubj->
-                            com.example.teacherapp.components.CardView(eachSubj) {
+                            CardView(eachSubj) {
                                 //to be made
+                                showDialouge=true
+                                selectedSubject=eachSubj
+
                             }
                         }
+                    }
+
+                    if(showDialouge) {
+                        Alert(
+                            title1 = "Add Marks",
+                            title2 = "Show Marks",
+                            subjectName = selectedSubject?.name?:"No Subject",
+                            onAdd = {
+                                //passing subject name and all details to another screen
+                                val subjectJson = Json.encodeToString(selectedSubject)
+                                showDialouge=false
+
+                                navController.navigate(campusConnectScreen.GiveInternalMarksScreen.name+"/$subjectJson")
+                            },
+                            onShow = {
+                                //passing subject name and all details to another screen
+                                val subjectJson = Json.encodeToString(selectedSubject)
+                                showDialouge=false
+                                navController.navigate(campusConnectScreen.HomeScreen.name)
+                            },
+                            onTapOutside = {
+                                showDialouge = false
+                            }
+                        )
                     }
                 }
             }

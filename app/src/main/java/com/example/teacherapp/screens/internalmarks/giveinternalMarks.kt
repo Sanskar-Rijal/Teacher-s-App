@@ -1,7 +1,5 @@
 package com.example.teacherapp.screens.internalmarks
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -28,12 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,12 +42,11 @@ import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
 import com.example.teacherapp.model.createAttendance.AttendanceData
-import com.example.teacherapp.model.createAttendance.createAttendanceRequest
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.model.getstudentbysec.StudentX
 import com.example.teacherapp.model.getstudentbysec.studentResponse
+import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
-import com.example.teacherapp.screens.attendance.CreateAttendance_viewModel
 import com.example.teacherapp.screens.attendance.GetStudentBySection_Viewmodel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -74,17 +63,6 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
     val uiState = getstudent.state.collectAsState()
 
 
-    //for attendance to mark student present or absent
-    val attendanceData = remember {
-        mutableStateListOf<AttendanceData>()
-    }
-
-
-    //to pass current date
-    val currentDate = remember {
-        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    }
-
     LaunchedEffect(key1 = null) {
         if (subject != null) {
             getstudent.getStudentBySection(
@@ -99,10 +77,10 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
     Scaffold(
         topBar = {
             AppBarbySans(
-                title = "Take Attendance",
+                title = "Add Internal Marks",
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
-                navController.popBackStack()
+               navController.popBackStack()
             }
         }
     ) { contentpadding ->
@@ -130,32 +108,15 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
                             contentPadding = PaddingValues(10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            items(data.students) { student->
-                                takeAtt(student){id,present->
-
-                                    val existing = attendanceData.find {
-                                        it.studentId == id
-                                    }
-                                    if (existing != null) {
-                                        attendanceData.remove(existing)
-                                    }
-
-                                    attendanceData.add(AttendanceData(present = present, studentId = id))
-                                }
+                            items(data.students) { student ->
+                                takeAtt(student)
                             }
-                            item {
+                            item{
                                 sansButton(
                                     modifier = Modifier.fillMaxWidth(),
                                     text = "Save"
                                 ) {
                                     //when button is pressed then data is to be sent to backend
-
-                                    val attendanceRequest = createAttendanceRequest(
-                                        attendanceData = attendanceData,
-                                        date = currentDate,
-                                        subjectId = subject!!.id
-                                    )
-                                    Log.d("saurav", "${uiState.value} ")
 
 
                                 }
@@ -174,24 +135,14 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
 fun takeAtt(
     student: StudentX,
     size:Int=50,
-    title:String="Sanskar",
-    onClick: (String,Boolean) -> Unit
+    title:String="Sanskar"
 ) {
 
-    //mutable state for checking whether the card has been clicked or not
-    var isChecked by rememberSaveable {
-        mutableStateOf(false)
-    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
-            .clickable {
-
-                isChecked =
-                    !isChecked //if the card is clicked then also the checkbox should be clicked
-                onClick(student.id, isChecked)
-            },
+          ,
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -233,19 +184,6 @@ fun takeAtt(
                 )
 
             }
-            //creating checkbox
-            Checkbox(
-                modifier = Modifier
-                    .padding(8.dp),
-                checked = isChecked,
-                onCheckedChange = {tick->
-                    isChecked=tick
-                },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = Color(0xFF588157),
-                )
-            )
-
         }
     }
 }
