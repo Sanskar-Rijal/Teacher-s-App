@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.components.AddNotice
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
 import com.example.teacherapp.components.sansButton
@@ -229,37 +230,4 @@ fun addNoticeField(
             }
         }
     }
-
-}
-
-@Composable
-fun AddNotice(modifier: Modifier=Modifier,
-              valueState: MutableState<String>,
-              labelId:String="Email",
-              enabled:Boolean=true,
-              keyboardType: KeyboardType = KeyboardType.Text,
-              imeaction: ImeAction = ImeAction.Next,
-              isSingleLine:Boolean=true,
-              onAction: KeyboardActions = KeyboardActions.Default,
-              maxlines:Int=1
-){
-    OutlinedTextField(
-        value =valueState.value,
-        onValueChange = {valueState.value=it},
-        label = {
-            Text(text = labelId)
-        },
-        singleLine = isSingleLine,
-        maxLines = maxlines,
-        textStyle = TextStyle(fontSize = 19.sp,
-            color = MaterialTheme.colorScheme.onBackground),
-        modifier = modifier
-            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-            .fillMaxWidth(),
-        enabled=enabled,
-        shape = RoundedCornerShape(15.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType,
-            imeAction = imeaction),
-        keyboardActions = onAction,
-    )
 }

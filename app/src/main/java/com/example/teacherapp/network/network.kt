@@ -11,12 +11,16 @@ import com.example.teacherapp.model.getstudentbysec.studentRequest
 import com.example.teacherapp.model.getstudentbysec.studentResponse
 import com.example.teacherapp.model.login.LoginRequest
 import com.example.teacherapp.model.login.LoginResponse
+import com.example.teacherapp.model.notes.NoteResponse
 import com.example.teacherapp.model.showAttendance.showAttendanceRequest
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.utils.Constants
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import javax.inject.Singleton
 
 //for Login
@@ -59,6 +63,16 @@ interface network {
     suspend fun sendNotice(
         @Body noticeRequest: NoticeRequest):NoticeResponse
 
-
+    // Function to upload a note
+    @Multipart
+    @POST(value = Constants.add_notes)
+    suspend fun SendNote(
+        @Part("title") title: String,
+        @Part("faculty") faculty: String,
+        @Part("semester") semester: String,
+        @Part("section") section: String,
+        @Part("subjectId") subjectId: String,
+        @Part file: MultipartBody.Part
+    ): NoteResponse
 
 }

@@ -16,6 +16,8 @@ import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
 import com.example.teacherapp.screens.NotesScreen.AddNotesScreen
 import com.example.teacherapp.screens.NotesScreen.NotesHomeScreen
+import com.example.teacherapp.screens.NotesScreen.NotesViewmodel
+import com.example.teacherapp.screens.NotesScreen.SelectNoteScreen
 import com.example.teacherapp.screens.attendance.AddAttendanceScreen
 import com.example.teacherapp.screens.attendance.AttendanceHomeScreen
 import com.example.teacherapp.screens.attendance.CreateAttendance_viewModel
@@ -162,12 +164,37 @@ fun CampusConnectNavigation() {
             val AttendanceViewModel:GetAllTeacherSubj_Viewmodel= hiltViewModel<GetAllTeacherSubj_Viewmodel>()
             NotesHomeScreen(navController,AttendanceViewModel)
         }
+        val route4=campusConnectScreen.SelectNoteScreen.name
+        composable("$route4/{details}",
+            arguments = listOf(
+                navArgument(name="details"){
+                    type=NavType.StringType
+                })){BackStackEntry->
+
+            val sendNotesViewmodel:NotesViewmodel= hiltViewModel<NotesViewmodel>()
+
+            BackStackEntry.arguments?.getString("details").let {details->
+
+                val subjectDecode= details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+
+                if(details !=null){
+                    SelectNoteScreen(navController = navController,
+                        notesViewModel = sendNotesViewmodel,
+                        details = subjectDecode)
+                }
+
+            }
+        }
 
         composable(campusConnectScreen.AddNotesScreen.name){
             //viewmodel to add new subject by teacher
             val addNewsubj = hiltViewModel<ViewModel_to_add_subj>()
             AddNotesScreen(navController,addNewsubj)
         }
+
+
 
         composable(campusConnectScreen.InternalMarksHomeScreen.name){
             //viewmodel to show all subject of teacher
@@ -183,6 +210,9 @@ fun CampusConnectNavigation() {
             val addNewsubj = hiltViewModel<ViewModel_to_add_subj>()
             AddInternalMarks(navController,addNewsubj)
         }
+
+
+
 
 
     }

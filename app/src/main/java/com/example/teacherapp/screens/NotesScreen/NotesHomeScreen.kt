@@ -15,6 +15,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,9 +30,12 @@ import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.GetAllTeacherSubj_Viewmodel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun NotesHomeScreen(navController: NavController = NavController(LocalContext.current),
@@ -37,6 +44,10 @@ fun NotesHomeScreen(navController: NavController = NavController(LocalContext.cu
     val data = viewModel.item
 
     val uiState = viewModel.state.collectAsState()
+
+    var selectedSubject: Subject? by remember {
+        mutableStateOf(null)
+    }
 
     Scaffold(
         topBar = {
@@ -85,7 +96,10 @@ fun NotesHomeScreen(navController: NavController = NavController(LocalContext.cu
                         ) {
                             items(data.subjects){eachSubj->
                                 com.example.teacherapp.components.CardView(eachSubj) {
+                                    selectedSubject=eachSubj
 
+                                    val subjectJson = Json.encodeToString(selectedSubject)
+                                    navController.navigate(campusConnectScreen.SelectNoteScreen.name+"/$subjectJson")
                                 }
                             }
                         }
