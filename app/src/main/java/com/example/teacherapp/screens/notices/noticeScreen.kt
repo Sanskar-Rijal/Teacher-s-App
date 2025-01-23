@@ -91,7 +91,7 @@ fun NoticeScreen(navController:NavController=NavController(LocalContext.current)
                             faculty = details?.faculty?:"COMPUTER",
                             section = details?.section?:"CD",
                             semester = details?.semester?:"6",
-                            subjectId = details?.id?:0,
+                            subjectId = details?.id?:"none",
                             title = title
                         ){
                             Toast.makeText(context, "Notice Sent Successfully", Toast.LENGTH_SHORT).show()

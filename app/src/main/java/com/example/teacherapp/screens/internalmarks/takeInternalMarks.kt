@@ -175,7 +175,7 @@ fun takeAtt(
     student: StudentX,
     size:Int=50,
     title:String="Sanskar",
-    onClick: (Int,Boolean) -> Unit
+    onClick: (String,Boolean) -> Unit
 ) {
 
     //mutable state for checking whether the card has been clicked or not

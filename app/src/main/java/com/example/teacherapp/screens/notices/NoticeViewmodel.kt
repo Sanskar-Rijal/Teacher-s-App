@@ -42,7 +42,7 @@ class NoticeViewmodel @Inject constructor(
         faculty: String,
         section: String,
         semester: String,
-        subjectId: Int,
+        subjectId: String,
         title: String,
         onSuccess:()->Unit
     ) {

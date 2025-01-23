@@ -5,6 +5,6 @@ data class NoticeRequest(
     val faculty: String,
     val section: String,
     val semester: String,
-    val subjectId: Int,
+    val subjectId: String,
     val title: String
 )
