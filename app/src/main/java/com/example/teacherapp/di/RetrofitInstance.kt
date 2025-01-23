@@ -41,7 +41,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideBooksApi(client: OkHttpClient): network {
+    fun provideRetrofit(client: OkHttpClient): network {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(client)
@@ -49,5 +49,8 @@ object AppModule {
             .build()
             .create(network::class.java)
     }
+
+
+
 }
 

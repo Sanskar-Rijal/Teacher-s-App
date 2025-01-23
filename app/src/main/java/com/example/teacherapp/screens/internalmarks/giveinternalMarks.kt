@@ -30,9 +30,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -109,7 +113,9 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             items(data.students) { student ->
-                                takeAtt(student)
+                                giveintmarks(student){
+
+                                }
                             }
                             item{
                                 sansButton(
@@ -131,17 +137,22 @@ fun giveinternalmarks(navController: NavController = NavController(LocalContext.
     }
 }
 
+
 @Composable
-fun takeAtt(
+fun giveintmarks(
     student: StudentX,
     size:Int=50,
-    title:String="Sanskar"
+    title:String="Sanskar",
+    onClick:()->Unit={}
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
+            .clickable {
+                onClick.invoke()
+            }
           ,
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
@@ -163,6 +174,7 @@ fun takeAtt(
             ) {
 
                 Text(
+                   // text = student.name?:"no data",
                     text = student.name?:"no data",
                     modifier = Modifier.padding(bottom = 5.dp),
                     fontSize = 20.sp,
@@ -175,6 +187,7 @@ fun takeAtt(
                     letterSpacing = 0.5.sp
                 )
                 Text(
+                    //text = student.email?:"no data",
                     text = student.email?:"no data",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
@@ -184,6 +197,33 @@ fun takeAtt(
                 )
 
             }
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color(0xFF1490CF), // Red color for total classes attended
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 23.sp
+                        )
+                    ) {
+                        append("0")
+                    }
+                    append("/") // Separator
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color.Gray, // Gray color for total classes conducted
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
+                    ) {
+                        append("20")
+                    }
+                },
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                lineHeight = 23.sp
+            )
+
         }
     }
 }

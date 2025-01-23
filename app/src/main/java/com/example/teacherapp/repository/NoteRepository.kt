@@ -5,12 +5,15 @@ import android.net.Uri
 import android.util.Log
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.login.LoginResponse
+import com.example.teacherapp.model.notes.NoteRequest
 import com.example.teacherapp.model.notes.NoteResponse
 import com.example.teacherapp.network.network
 import com.example.teacherapp.utils.FileUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class NoteRepository @Inject constructor(
@@ -34,15 +37,22 @@ class NoteRepository @Inject constructor(
 
             val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
+            val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
+            val facultyPart = faculty.toRequestBody("text/plain".toMediaTypeOrNull())
+            val semesterPart = semester.toRequestBody("text/plain".toMediaTypeOrNull())
+            val sectionPart = section.toRequestBody("text/plain".toMediaTypeOrNull())
+            val subjectIdPart = subjectId.toRequestBody("text/plain".toMediaTypeOrNull())
+
             val response = api.SendNote(
-                title = title,
-                faculty = faculty,
-                semester = semester,
-                section = section,
-                subjectId = subjectId,
-                file = body
+                title = titlePart,
+                faculty = facultyPart,
+                semester = semesterPart,
+                section = sectionPart,
+                subjectId = subjectIdPart,
+                file = body,
             )
 
+            Log.d("jeevan", "repository try block ${body}")
             DataorException.Success(data = response)
 
         }catch (e: retrofit2.HttpException) {

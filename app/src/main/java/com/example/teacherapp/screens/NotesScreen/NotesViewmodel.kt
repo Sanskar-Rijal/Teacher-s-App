@@ -46,7 +46,7 @@ class NotesViewmodel @Inject constructor(
         fileUri: Uri,
         onSuccess:()->Unit
     ){
-        Log.d("pukar", "title from viewmodel: $title")
+        Log.d("jeevan", "Title: $title, Faculty: $faculty, Semester: $semester, Section: $section, SubjectId: $subjectId")
         viewModelScope.launch {
             _state.value=LoadingState.LOADING
             try {

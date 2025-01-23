@@ -84,9 +84,9 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 
 
     //to pass current date
-    val currentDate = remember {
-        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    }
+//    val currentDate = remember {
+//        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+//    }
 
     LaunchedEffect(key1 = null) {
         if (subject != null) {
@@ -155,7 +155,7 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 
                                     val attendanceRequest = createAttendanceRequest(
                                         attendanceData = attendanceData,
-                                        date = currentDate,
+                                       // date = currentDate,
                                         subjectId = subject!!.id
                                     )
                                     Log.d("saurav", "${uiState.value} ")
