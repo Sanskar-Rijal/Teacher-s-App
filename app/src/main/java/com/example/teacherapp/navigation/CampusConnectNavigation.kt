@@ -31,6 +31,7 @@ import com.example.teacherapp.screens.internalmarks.AddInternalMarks
 import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel
 import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel_Factory
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
+import com.example.teacherapp.screens.internalmarks.ShowInternalMarks
 import com.example.teacherapp.screens.internalmarks.giveinternalmarks
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
@@ -241,6 +242,12 @@ fun CampusConnectNavigation() {
 
             }
         }
+
+        //for show attendance Screen
+        composable(campusConnectScreen.ShowInternalMarksScreen.name){
+            ShowInternalMarks(navController=navController)
+        }
+
 
     }
 
