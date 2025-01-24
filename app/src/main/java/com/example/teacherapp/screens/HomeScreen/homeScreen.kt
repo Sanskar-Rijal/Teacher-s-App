@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,12 +46,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.room.util.TableInfo
 import com.example.teacherapp.R
+import com.example.teacherapp.model.getAddedData.getsubjects
+import com.example.teacherapp.model.getmydetails.Data
+import com.example.teacherapp.model.getmydetails.MydetailsResponse
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
 
 @Composable
 fun HomeScreen(navController: NavController= NavController(LocalContext.current),
-               loginViewmodel: LoginViewmodel) {
+               loginViewmodel: LoginViewmodel,
+               homeScreenViewModel: HomeScreenViewModel
+               ) {
+
+    val details: MydetailsResponse = homeScreenViewModel.item
+
+    val uiState = homeScreenViewModel.state.collectAsState()
+
     Scaffold { contentpadding ->
 
         Surface(
@@ -84,7 +95,7 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                             color = Color.Black.copy(0.8f)
                         )
                         Text(
-                            text = "Sanskar Rijal",
+                            text = details.data.name?:"No Name",
                             modifier = Modifier.padding(top = 10.dp),
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 20.sp,

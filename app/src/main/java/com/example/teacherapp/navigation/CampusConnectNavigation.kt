@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.screens.HomeScreen.HomeScreen
+import com.example.teacherapp.screens.HomeScreen.HomeScreenViewModel
 import com.example.teacherapp.screens.LoginScreen.LoginScreen
 import com.example.teacherapp.screens.LoginScreen.LoginViewmodel
 import com.example.teacherapp.screens.NotesScreen.AddNotesScreen
@@ -45,6 +46,8 @@ fun CampusConnectNavigation() {
 
     val loginviewmodel:LoginViewmodel= hiltViewModel()
 
+    val mydetailsViewmodel:HomeScreenViewModel= hiltViewModel<HomeScreenViewModel>()
+
     val domain = "sangyog-cc.vercel.app"
 
     LaunchedEffect(Unit) {
@@ -64,7 +67,9 @@ fun CampusConnectNavigation() {
         }
 
         composable(campusConnectScreen.HomeScreen.name){
-            HomeScreen(navController,loginviewmodel)
+            HomeScreen(navController = navController,
+                loginViewmodel = loginviewmodel,
+                homeScreenViewModel = mydetailsViewmodel)
         }
 
         composable(campusConnectScreen.AttendanceHomeScreen.name){

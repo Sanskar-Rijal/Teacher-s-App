@@ -9,6 +9,7 @@ import com.example.teacherapp.model.addSubject.AddsubjResponse
 import com.example.teacherapp.model.createAttendance.createAttendanceRequest
 import com.example.teacherapp.model.createAttendance.createAttendanceResponse
 import com.example.teacherapp.model.getAddedData.getsubjects
+import com.example.teacherapp.model.getmydetails.MydetailsResponse
 import com.example.teacherapp.model.getstudentbysec.studentRequest
 import com.example.teacherapp.model.getstudentbysec.studentResponse
 import com.example.teacherapp.model.login.LoginRequest
@@ -86,4 +87,11 @@ interface network {
         @Body addInternalMarksRequest: InternalMarksRequest
     ): InternalMarksResponse
 
+
+    //function to get my details
+    @GET(value=Constants.my_details)
+    suspend fun getmyDetails():MydetailsResponse
+
+
 }
+
