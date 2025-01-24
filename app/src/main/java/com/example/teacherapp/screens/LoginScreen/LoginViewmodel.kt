@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.teacherapp.caching.DataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewmodel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
+class LoginViewmodel @Inject constructor(private val repository: AuthRepository,
+    private val cache:DataStoreManager) : ViewModel() {
 
    var item:LoginResponse by mutableStateOf(LoginResponse(success =false  , message = ""))
     var isLoading:Boolean by mutableStateOf(false)
@@ -85,6 +87,9 @@ class LoginViewmodel @Inject constructor(private val repository: AuthRepository)
     }
 
     fun logoutTeacher() {
-        repository.logoutTeacher()
+        viewModelScope.launch {
+            repository.logoutTeacher()
+            cache.clearUserDetails()
+        }
     }
 }

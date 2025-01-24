@@ -36,4 +36,11 @@ class DataStoreManager(private val context: Context) {
         .map { preferences ->
             preferences[USER_EMAIL_KEY]
         }
+
+    // Clear all user details
+    suspend fun clearUserDetails() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 }

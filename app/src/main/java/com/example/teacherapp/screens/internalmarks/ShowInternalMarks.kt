@@ -48,6 +48,7 @@ import com.example.teacherapp.model.showAttendance.Attendance
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.Showatt
+import com.example.teacherapp.utils.getRollno
 
 @Composable
 fun ShowInternalMarks(navController: NavController = NavController(LocalContext.current),
@@ -135,7 +136,7 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
                 horizontalArrangement = Arrangement.SpaceBetween){
                 Column {
                     Text(
-                        text = data.marks ?: "no data",
+                        text = getRollno(data.studentEmail)?: "no data",
                         modifier = Modifier.padding(bottom = 5.dp),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.ExtraBold,
@@ -146,10 +147,10 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
                     )
 
                     Text(
-                        text = data.studentEmail?:"no data",
+                        text = data.studentName?:"no data",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color.LightGray,
+                        color = Color.Gray.copy(0.7f),
                         textAlign = TextAlign.Center,
                         lineHeight = 23.sp
                     )

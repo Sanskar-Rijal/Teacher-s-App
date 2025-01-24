@@ -17,8 +17,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun sansButton(
+    color:Color=Color(0xFF1490CF),
+    textcolor:Color=Color.White,
     modifier: Modifier=Modifier,
     text:String,
+    icon:Boolean=true,
     onClick: () -> Unit) {
     // Create Class Button
     Button(
@@ -26,14 +29,15 @@ fun sansButton(
             onClick.invoke()
         },
         modifier = modifier.padding(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1490CF)),
+        colors = ButtonDefaults.buttonColors(containerColor = color),
         elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 10.dp)
     ) {
         Text(text = text,
             modifier = Modifier.padding(end = 10.dp),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = Color.White)
+            color = textcolor)
+        if(icon)
         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "button")
     }
 }

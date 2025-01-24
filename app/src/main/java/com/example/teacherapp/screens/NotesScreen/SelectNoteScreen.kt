@@ -147,7 +147,12 @@ fun SelectNoteScreen(
                     )
 
                     // File picker button
-                    sansButton(text = "Select Note") {
+                    sansButton(
+                        color =Color(0xFF489fb5),
+                        textcolor = Color.White,
+                        icon = false,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Select Note") {
                         if (selectedTitle.value.isEmpty()) {
                             Toast.makeText(context, "Please enter a title first", Toast.LENGTH_SHORT).show()
                         } else {

@@ -58,6 +58,7 @@ import com.example.teacherapp.model.getstudentbysec.StudentX
 import com.example.teacherapp.model.getstudentbysec.studentResponse
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
+import com.example.teacherapp.utils.getRollno
 import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -236,7 +237,7 @@ fun takeAtt(
             ) {
 
                 Text(
-                    text = student.name?:"no data",
+                    text = getRollno(student.email)?:"no data",
                     modifier = Modifier.padding(bottom = 5.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -248,10 +249,10 @@ fun takeAtt(
                     letterSpacing = 0.5.sp
                 )
                 Text(
-                    text = student.email?:"no data",
+                    text =student.name?:"no data",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color.LightGray,
+                    color = Color.Gray.copy(0.7f),
                     textAlign = TextAlign.Center,
                     lineHeight = 23.sp
                 )
