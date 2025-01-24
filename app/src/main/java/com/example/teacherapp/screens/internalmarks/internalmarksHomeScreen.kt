@@ -126,7 +126,7 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
                                 //passing subject name and all details to another screen
                                 val subjectJson = Json.encodeToString(selectedSubject)
                                 showDialouge=false
-                                navController.navigate(campusConnectScreen.ShowInternalMarksScreen.name)
+                                navController.navigate(campusConnectScreen.ShowInternalMarksScreen.name+"/$subjectJson")
                             },
                             onTapOutside = {
                                 showDialouge = false

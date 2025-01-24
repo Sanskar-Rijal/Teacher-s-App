@@ -33,6 +33,7 @@ import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel
 import com.example.teacherapp.screens.internalmarks.AddInternalMarksViewmodel_Factory
 import com.example.teacherapp.screens.internalmarks.InternalMarksHomeScreen
 import com.example.teacherapp.screens.internalmarks.ShowInternalMarks
+import com.example.teacherapp.screens.internalmarks.ShowMarksViewModel
 import com.example.teacherapp.screens.internalmarks.giveinternalmarks
 import com.example.teacherapp.screens.notices.NoticeHomeScreen
 import com.example.teacherapp.screens.notices.NoticeScreen
@@ -45,8 +46,6 @@ fun CampusConnectNavigation() {
     val navController = rememberNavController()
 
     val loginviewmodel:LoginViewmodel= hiltViewModel()
-
-    val mydetailsViewmodel:HomeScreenViewModel= hiltViewModel<HomeScreenViewModel>()
 
     val domain = "sangyog-cc.vercel.app"
 
@@ -67,6 +66,9 @@ fun CampusConnectNavigation() {
         }
 
         composable(campusConnectScreen.HomeScreen.name){
+
+            val mydetailsViewmodel:HomeScreenViewModel= hiltViewModel<HomeScreenViewModel>()
+
             HomeScreen(navController = navController,
                 loginViewmodel = loginviewmodel,
                 homeScreenViewModel = mydetailsViewmodel)
@@ -249,11 +251,26 @@ fun CampusConnectNavigation() {
         }
 
         //for show attendance Screen
-        composable(campusConnectScreen.ShowInternalMarksScreen.name){
-            ShowInternalMarks(navController=navController)
+        val route6=campusConnectScreen.ShowInternalMarksScreen.name
+        composable("$route6/{details}",
+            arguments = listOf(
+                navArgument(name = "details"){
+                    type= NavType.StringType
+                })){BackStackEntry->
+
+            val showMarksViewmodel:ShowMarksViewModel= hiltViewModel<ShowMarksViewModel>()
+
+            BackStackEntry.arguments?.getString("details").let {details->
+
+                val subjectDecode= details?.let {
+                    Json.decodeFromString<Subject>(it)
+                }
+                if(details !=null){
+                    ShowInternalMarks(navController=navController,
+                        showmarks=showMarksViewmodel,
+                        subject = subjectDecode)
+                }
+            }
         }
-
-
     }
-
 }

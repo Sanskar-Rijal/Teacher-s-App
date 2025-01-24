@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,10 +31,18 @@ import com.example.teacherapp.model.getAddedData.Subject
 
 //to show subject name
 
-
+@Preview
 @Composable
 fun CardView(
-    eachsubj: Subject,
+    eachsubj: Subject=Subject(
+        faculty = "faculty",
+        id = "23",
+        name = "name",
+        semester = "semester",
+        subjectCode = "subjectCode",
+        teacherId = 1,
+        section = "section"
+    ),
     size:Int=50,
     title:String="hehehe",
     onClick: () -> Unit={}
@@ -48,9 +57,10 @@ fun CardView(
 //        section = "section"
 //    )
     Card(modifier = Modifier
-        .height(105.dp)
+        //.height(105.dp)
         .fillMaxWidth()
-        .padding(5.dp)
+        .wrapContentHeight()
+        .padding(10.dp)
         .clickable {
             onClick()
         },
@@ -60,7 +70,7 @@ fun CardView(
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(top = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
 
@@ -106,7 +116,7 @@ fun roundedButton(
     radius:Int=30,
 ){
     Surface(modifier = Modifier
-        .clip(RoundedCornerShape(bottomEndPercent = 40,
+        .clip(RoundedCornerShape(bottomEndPercent = 0,
             topStartPercent = radius)),
         color = Color(0xFF1490CF)
     ){

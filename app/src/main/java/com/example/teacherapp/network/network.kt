@@ -4,6 +4,8 @@ import com.example.teacherapp.model.AddInternalMarks.InternalMarksRequest
 import com.example.teacherapp.model.AddInternalMarks.InternalMarksResponse
 import com.example.teacherapp.model.Notice.NoticeRequest
 import com.example.teacherapp.model.Notice.NoticeResponse
+import com.example.teacherapp.model.ShowInternalMarks.ShowMarksRequest
+import com.example.teacherapp.model.ShowInternalMarks.ShowMarksResponse
 import com.example.teacherapp.model.addSubject.AddSubjRequest
 import com.example.teacherapp.model.addSubject.AddsubjResponse
 import com.example.teacherapp.model.createAttendance.createAttendanceRequest
@@ -92,6 +94,11 @@ interface network {
     @GET(value=Constants.my_details)
     suspend fun getmyDetails():MydetailsResponse
 
+
+    //function to show internal marks
+    @POST(value = Constants.show_marks)
+    suspend fun showInternalMarks(
+        @Body ShowInternalMarksRequest: ShowMarksRequest):ShowMarksResponse
 
 }
 
