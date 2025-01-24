@@ -82,6 +82,20 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
         mutableStateListOf<AttendanceData>()
     }
 
+    LaunchedEffect(data.students) {
+        attendanceData.clear() // Clear existing data
+        attendanceData.addAll(
+            data.students.map {
+                AttendanceData(
+                    studentId = it.id,
+                    present = false
+                )
+            }
+        )
+    }
+
+    Log.d("saurav", "first data:${attendanceData} ")
+
 
     //to pass current date
 //    val currentDate = remember {
@@ -134,16 +148,17 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             items(data.students) { student->
-                                takeAtt(student){id,present->
+                                takeAtt(student,attendanceData){id,present->
+                                    //updating the attendance for corresponding student
 
-                                    val existing = attendanceData.find {
-                                        it.studentId == id
+                                    val index=attendanceData.indexOfFirst {
+                                        it.studentId==id
                                     }
-                                    if (existing != null) {
-                                        attendanceData.remove(existing)
+                                    if(index != -1){
+                                        attendanceData[index]=attendanceData[index].copy(present = present)
                                     }
 
-                                    attendanceData.add(AttendanceData(present = present, studentId = id))
+                                    Log.d("saurav", "${attendanceData} ")
                                 }
                             }
                             item {
@@ -152,13 +167,13 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
                                     text = "Save"
                                 ) {
                                     //when button is pressed then data is to be sent to backend
+                                    Log.d("saurav", "final data sent to backend ${attendanceData} ")
 
                                     val attendanceRequest = createAttendanceRequest(
                                         attendanceData = attendanceData,
                                        // date = currentDate,
                                         subjectId = subject!!.id
                                     )
-                                    Log.d("saurav", "${uiState.value} ")
 
                                     createAttendace.createAttendance(
                                         attendanceRequest =  attendanceRequest
@@ -183,22 +198,23 @@ fun TakeAttendance(navController: NavController=NavController(LocalContext.curre
 @Composable
 fun takeAtt(
     student:StudentX,
-    size:Int=50,
-    title:String="Sanskar",
+    attendanceData: List<AttendanceData>,
     onClick: (String,Boolean) -> Unit
 ) {
 
-    //mutable state for checking whether the card has been clicked or not
-    var isChecked by rememberSaveable {
-        mutableStateOf(false)
-    }
+//    //mutable state for checking whether the card has been clicked or not
+//    var isChecked by rememberSaveable {
+//        mutableStateOf(false)
+//    }
+    // Find the attendance record for this student
+    val isChecked = attendanceData.find { it.studentId == student.id }?.present ?: false
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                isChecked = !isChecked //if the card is clicked then also the checkbox should be clicked
-                onClick(student.id, isChecked)
+                //isChecked = !isChecked //if the card is clicked then also the checkbox should be clicked
+                onClick(student.id, !isChecked)
             },
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
@@ -247,7 +263,8 @@ fun takeAtt(
                     .padding(8.dp),
                 checked = isChecked,
                 onCheckedChange = {tick->
-                    isChecked=tick
+                    //isChecked=tick
+                    onClick(student.id,tick)
                 },
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color(0xFF588157),

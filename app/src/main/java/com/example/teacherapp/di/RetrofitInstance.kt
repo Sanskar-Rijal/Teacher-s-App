@@ -5,6 +5,7 @@ import com.example.teacherapp.cookiesmanage.AppCookieJar
 import com.example.teacherapp.network.network
 import com.example.teacherapp.utils.Constants
 import android.content.Context
+import com.example.teacherapp.caching.DataStoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,6 +52,11 @@ object AppModule {
     }
 
 
+        @Provides
+        @Singleton
+        fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
+            return DataStoreManager(context)
+        }
 
 }
 

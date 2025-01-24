@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.teacherapp.caching.DataStoreManager
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.model.getmydetails.Data
@@ -14,13 +15,15 @@ import com.example.teacherapp.screens.LoginScreen.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val repository: getmyDetails_Repository
+    private val repository: getmyDetails_Repository,
+    private val cache:DataStoreManager
 ):ViewModel() {
 
     var item: MydetailsResponse by
@@ -39,12 +42,12 @@ class HomeScreenViewModel @Inject constructor(
 
 
     init{
-        details()
+        loadDetails()
     }
 
-    fun details(){
-        getDetails()
-    }
+//    fun details(){
+//        getDetails()
+//    }
 
    private fun getDetails(){
         _state.value =LoadingState.LOADING
@@ -58,6 +61,7 @@ class HomeScreenViewModel @Inject constructor(
                         item= response.data!!
                         if(item.success == true){
                             _state.value = LoadingState.SUCCESS
+                            cache.saveUserDetails(name=item.data.name, email = item.data.email)
                         }
                     }
                     is DataorException.Error ->{
@@ -72,8 +76,28 @@ class HomeScreenViewModel @Inject constructor(
                 _state.value = LoadingState.FAILED
             }
         }
+    }
 
 
+    private fun loadDetails(){
+        viewModelScope.launch {
+            val cachedName =cache.userName.first()
+            val cachedEmail= cache.userEmail.first()
+
+            if(cachedName.isNullOrEmpty()&& cachedEmail.isNullOrEmpty()){
+                getDetails()
+            }else{
+                item = MydetailsResponse(data = Data(name = cachedName!!,
+                    email = cachedEmail!!,
+                    password = "",
+                    phone = "",
+                    role = "",
+                    section = null,
+                    id = ""
+                ), success = true)
+            }
+
+        }
     }
 
 
