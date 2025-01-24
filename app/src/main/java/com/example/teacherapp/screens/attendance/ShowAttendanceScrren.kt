@@ -49,6 +49,7 @@ import com.example.teacherapp.model.showAttendance.Attendance
 import com.example.teacherapp.model.showAttendance.showAttendanceRequest
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.screens.LoginScreen.LoadingState
+import com.example.teacherapp.utils.getRollno
 
 
 @Composable
@@ -136,7 +137,7 @@ fun Showatt(
             horizontalArrangement = Arrangement.SpaceBetween){
             Column {
                 Text(
-                    text = data.name ?: "no data",
+                    text = getRollno(data.email)?:"no data",
                     modifier = Modifier.padding(bottom = 5.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -147,7 +148,7 @@ fun Showatt(
                 )
 
                 Text(
-                    text = data.email?:"no data",
+                    text=data.name ?: "no data",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = Color.LightGray,
