@@ -37,7 +37,7 @@ class LoginRepository @Inject constructor(
             catch (parseException: Exception) {
                 null
             }
-
+            Log.d("april", "repository catch block ${e.message()} | parsedError: $parsedError")
 
             // Return parsed error or fallback to the generic exception message
             if (parsedError != null) {
@@ -48,7 +48,7 @@ class LoginRepository @Inject constructor(
 
         } catch (e: Exception) {
             // Handle other exceptions
-
+            Log.d("april", "repository catch block ${e.message} ")
             DataorException.Error(message = e.message.toString())
         }
     }

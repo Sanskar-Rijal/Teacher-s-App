@@ -47,7 +47,9 @@ fun CampusConnectNavigation() {
 
     val loginviewmodel:LoginViewmodel= hiltViewModel()
 
-    val domain = "sangyog-cc.vercel.app"
+//    val domain = "sangyog-cc.vercel.app"
+    val domain = "campus-connect-dag0d0dzfphceser.centralindia-01.azurewebsites.net"
+
 
     LaunchedEffect(Unit) {
         loginviewmodel.checkStatusLoginStatus(domain)
