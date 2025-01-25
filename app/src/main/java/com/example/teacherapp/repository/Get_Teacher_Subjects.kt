@@ -17,12 +17,12 @@ class Get_Teacher_Subjects @Inject constructor(
 
             val response = getTeacher.getAddedData()
 
-            Log.d("sangyog", "getSubjects: $response")
+            Log.d("turtle", "getSubjects: $response")
 
             DataorException.Success(data = response)
 
         }catch (ex:Exception){
-            Log.d("sangyog", "getSubjects: ${ex.message}")
+            Log.d("turtle", "getSubjects:from repo ${ex.message}")
             DataorException.Error(message = ex.message.toString())
         }
     }

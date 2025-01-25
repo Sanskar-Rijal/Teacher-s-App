@@ -11,8 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,11 +27,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
+import com.example.teacherapp.components.Alert
 import com.example.teacherapp.components.AppBarbySans
+import com.example.teacherapp.components.CardView
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.components.ShowFailedText
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
@@ -49,6 +55,11 @@ fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.c
     var selectedSubject: Subject? by remember {
         mutableStateOf(null)
     }
+
+    var showDeleteDialouge by remember {
+        mutableStateOf(false)
+    }
+
 
 
     Scaffold(
@@ -83,23 +94,61 @@ fun NoticeHomeScreen(navController: NavController = NavController(LocalContext.c
                     LoadingDialog()
                 } else {
                     Column(modifier = Modifier.padding(10.dp)) {
+                        if (uiState.value == LoadingState.FAILED) {
+                            // Display a message when there are no subjects
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center) {
+                                ShowFailedText()
+                            }
+                        } else {
 
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(20.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Top
-                        ) {
-                            items(data.subjects){eachSubj->
-                                com.example.teacherapp.components.CardView(eachSubj) {
-                                    //to be made
-                                    selectedSubject=eachSubj
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Top
+                            ) {
+                                items(data.subjects) { eachSubj ->
+                                    CardView(eachsubj = eachSubj,
+                                        onClick = {
+                                            selectedSubject = eachSubj
 
-                                    val subjectJson = Json.encodeToString(selectedSubject)
+                                            val subjectJson = Json.encodeToString(selectedSubject)
 
-                                    navController.navigate(campusConnectScreen.NoticeScreen.name+"/$subjectJson")
+                                            navController.navigate(campusConnectScreen.NoticeScreen.name + "/$subjectJson")
+                                        }) {
+                                        //onlong pressed
+                                        selectedSubject = eachSubj
+                                        showDeleteDialouge = true
+                                    }
                                 }
                             }
+                            if (showDeleteDialouge) {
+                                Alert(
+                                    title1 = "Delete",
+                                    title2 = "Cancel",
+                                    subjectName = selectedSubject?.name ?: "No Subject",
+                                    onAdd = {
+                                        viewModel.deleteSubj(
+                                            faculty = selectedSubject?.faculty ?: "",
+                                            section = selectedSubject?.section ?: "",
+                                            semester = selectedSubject?.semester ?: "",
+                                            subjectCode = selectedSubject?.subjectCode ?: ""
+                                        )
+                                        showDeleteDialouge = false
+                                        //navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
+                                    },
+                                    onShow = {
+                                        showDeleteDialouge = false
+                                    },
+                                    onTapOutside = {
+                                        showDeleteDialouge = false
+                                    }
+                                )
+                            }
+
+
                         }
                     }
                 }

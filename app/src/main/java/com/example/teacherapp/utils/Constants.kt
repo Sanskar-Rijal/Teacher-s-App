@@ -14,4 +14,5 @@ object Constants {
     const val add_internal_marks="marks/add"
     const val my_details="details/me"
     const val show_marks="marks/details"
+    const val delete_subject="teacher/delete"
     }

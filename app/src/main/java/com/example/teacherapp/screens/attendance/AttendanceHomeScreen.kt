@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import com.example.teacherapp.components.Alert
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.CardView
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.components.ShowFailedText
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.model.getAddedData.getsubjects
 import com.example.teacherapp.navigation.campusConnectScreen
@@ -65,6 +67,10 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
     var showDialouge by remember {
         mutableStateOf(false)
     }
+    var showDeleteDialouge by remember {
+        mutableStateOf(false)
+    }
+
 
     var selectedSubject:Subject? by remember {
         mutableStateOf(null)
@@ -109,7 +115,15 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                     LoadingDialog()
                 } else {
                     Column(modifier = Modifier.padding(10.dp)) {
-
+                        Log.d("turtle", "${uiState.value}")
+                        if (uiState.value== LoadingState.FAILED) {
+                            // Display a message when there are no subjects
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center) {
+                                ShowFailedText()
+                            }
+                        }else{
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(20.dp),
@@ -118,11 +132,16 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                         ) {
                             items(data.subjects){eachSubj->
 
-                                CardView(eachSubj){
+                                CardView(eachsubj = eachSubj,
+                                    onClick = {
                                     showDialouge=true
                                     selectedSubject=eachSubj
 //                                    navController.navigate(campusConnectScreen.ChooseAttendanceScreen.name)
-                                }
+                                }, onLongpressed = {
+                                        showDeleteDialouge=true
+                                        selectedSubject=eachSubj
+                                    }
+                                )
                             }
                         }
 
@@ -150,12 +169,36 @@ fun AttendanceHomeScreen(navController: NavController= NavController(LocalContex
                             )
                         }
 
+                        if(showDeleteDialouge){
+                            Alert(
+                                title1 = "Delete",
+                                title2 = "Cancel",
+                                subjectName = selectedSubject?.name?:"No Subject",
+                                onAdd = {
+                                    viewModel.deleteSubj(
+                                        faculty = selectedSubject?.faculty?:"",
+                                        section = selectedSubject?.section?:"",
+                                        semester = selectedSubject?.semester?:"",
+                                        subjectCode = selectedSubject?.subjectCode?:""
+                                    )
+                                    showDeleteDialouge=false
+                                    //navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
+                                },
+                                onShow = {
+                                    showDeleteDialouge=false
+                                },
+                                onTapOutside = {
+                                    showDeleteDialouge=false
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
     }
-}
+}}
+
 
 //floating bottom below
 @Composable

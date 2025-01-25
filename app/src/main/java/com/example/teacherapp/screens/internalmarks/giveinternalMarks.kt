@@ -298,16 +298,16 @@ fun showStudent(
             },
             onTapOutside = {
                 showDialouge=false
-            }
+            },
+            student = student
         )
     }
 }
 
 
 @Composable
-@Preview
 fun giveinternalMarks(
-    subjectName: String = "SANSKAR RIJAL",
+    student:StudentX,
     onSave: (String) -> Unit = {},
     onTapOutside: () -> Unit = {}
 ){
@@ -327,7 +327,7 @@ fun giveinternalMarks(
         modifier = Modifier.fillMaxWidth(),
         title = {
             Text(
-                text = subjectName,
+                text= getRollno(student.email)?:"no data",
                 //modifier = Modifier.fillMaxWidth(),
                // textAlign = TextAlign.Center,
                 maxLines = 1,
@@ -336,9 +336,10 @@ fun giveinternalMarks(
         },
         text = {
             Text(
-                text = "PUR078BCT079",
+                text =student.name?:"no data",
                // modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Gray.copy(0.7f),
                // textAlign = TextAlign.Center
             )
         },
@@ -353,7 +354,7 @@ fun giveinternalMarks(
                 AddNotice(
                     modifier = Modifier,
                     valueState = marks,
-                    labelId = "Description",
+                    labelId = "Internal Marks",
                     enabled = true,
                     keyboardType = KeyboardType.Number,
                     imeaction = ImeAction.Done,

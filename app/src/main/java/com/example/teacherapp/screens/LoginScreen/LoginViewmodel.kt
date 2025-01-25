@@ -1,15 +1,11 @@
 package com.example.teacherapp.screens.LoginScreen
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.getValue
 import com.example.teacherapp.data.DataorException
 import com.example.teacherapp.model.login.LoginResponse
-import com.example.teacherapp.repository.AuthRepository
+import com.example.teacherapp.repository.LoginRepository
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.teacherapp.caching.DataStoreManager
@@ -21,8 +17,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewmodel @Inject constructor(private val repository: AuthRepository,
-    private val cache:DataStoreManager) : ViewModel() {
+class LoginViewmodel @Inject constructor(private val repository: LoginRepository,
+                                         private val cache:DataStoreManager) : ViewModel() {
 
    var item:LoginResponse by mutableStateOf(LoginResponse(success =false  , message = ""))
     var isLoading:Boolean by mutableStateOf(false)

@@ -9,7 +9,7 @@ import com.example.teacherapp.network.network
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(
+class LoginRepository @Inject constructor(
     private val network: network,
     private val cookieJar: AppCookieJar
 ) {

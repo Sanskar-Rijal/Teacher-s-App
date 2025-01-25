@@ -68,7 +68,7 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
             modifier = Modifier
                 .padding(contentpadding)
                 .fillMaxSize(),
-            color = Color(0xFF1490CF)
+            color = Color(0xFF35474F)
         ) {
 
             Column {
@@ -83,16 +83,18 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                         imageVector = Icons.Rounded.AccountCircle,
                         modifier = Modifier.size(80.dp),
                         contentDescription = "User Icons",
-                        tint = Color.Black.copy(0.5f)
+                        tint = Color.White.copy(0.5f)
                     )
 
-                    Column(modifier = Modifier.padding(10.dp)) {
+                    Column(modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f)){// Take the remaining space in the Row
                         Text(
                             text = "Welcome !",
                             style = MaterialTheme.typography.labelMedium,
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black.copy(0.8f)
+                            color = Color(0xFF1490CF).copy(0.7f)
                         )
                         Text(
                             text = details.data.name?:"No Name",
@@ -100,7 +102,7 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                             style = MaterialTheme.typography.bodySmall,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black.copy(0.8f)
+                            color = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -114,12 +116,12 @@ fun HomeScreen(navController: NavController= NavController(LocalContext.current)
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.Logout,
                             contentDescription = "LogOut",
-                            tint = Color.Black.copy(alpha = 0.4f))
+                            tint = Color.White.copy(0.7f))
                         }
 
 
                 }
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(30.dp))
                 BackgroundCardView(navController)
             }
         }

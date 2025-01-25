@@ -2,6 +2,7 @@ package com.example.teacherapp.screens.internalmarks
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,8 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.teacherapp.R
@@ -32,6 +36,7 @@ import com.example.teacherapp.components.Alert
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.CardView
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.components.ShowFailedText
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.navigation.campusConnectScreen
 import com.example.teacherapp.screens.LoginScreen.LoadingState
@@ -56,6 +61,12 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
     var showDialouge by remember {
         mutableStateOf(false)
     }
+
+    var showDeleteDialouge by remember {
+        mutableStateOf(false)
+    }
+
+
 
     Scaffold(
         topBar = {
@@ -93,45 +104,82 @@ fun InternalMarksHomeScreen(navController: NavController = NavController(LocalCo
                 LoadingDialog()
             } else {
                 Column(modifier = Modifier.padding(10.dp)) {
-
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        items(data.subjects){eachSubj->
-                            CardView(eachSubj) {
-                                //to be made
-                                showDialouge=true
-                                selectedSubject=eachSubj
-
+                    if (uiState.value == LoadingState.FAILED) {
+                        // Display a message when there are no subjects
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center) {
+                         ShowFailedText()
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top
+                        ) {
+                            items(data.subjects) { eachSubj ->
+                                CardView(eachsubj = eachSubj,
+                                    onClick = {
+                                        showDialouge = true
+                                        selectedSubject = eachSubj
+//                                    navController.navigate(campusConnectScreen.ChooseAttendanceScreen.name)
+                                    }, onLongpressed = {
+                                        showDeleteDialouge = true
+                                        selectedSubject = eachSubj
+                                    }
+                                )
                             }
                         }
-                    }
 
-                    if(showDialouge) {
-                        Alert(
-                            title1 = "Add Marks",
-                            title2 = "Show Marks",
-                            subjectName = selectedSubject?.name?:"No Subject",
-                            onAdd = {
-                                //passing subject name and all details to another screen
-                                val subjectJson = Json.encodeToString(selectedSubject)
-                                showDialouge=false
+                        if (showDialouge) {
+                            Alert(
+                                title1 = "Add Marks",
+                                title2 = "Show Marks",
+                                subjectName = selectedSubject?.name ?: "No Subject",
+                                onAdd = {
+                                    //passing subject name and all details to another screen
+                                    val subjectJson = Json.encodeToString(selectedSubject)
+                                    showDialouge = false
 
-                                navController.navigate(campusConnectScreen.GiveInternalMarksScreen.name+"/$subjectJson")
-                            },
-                            onShow = {
-                                //passing subject name and all details to another screen
-                                val subjectJson = Json.encodeToString(selectedSubject)
-                                showDialouge=false
-                                navController.navigate(campusConnectScreen.ShowInternalMarksScreen.name+"/$subjectJson")
-                            },
-                            onTapOutside = {
-                                showDialouge = false
-                            }
-                        )
+                                    navController.navigate(campusConnectScreen.GiveInternalMarksScreen.name + "/$subjectJson")
+                                },
+                                onShow = {
+                                    //passing subject name and all details to another screen
+                                    val subjectJson = Json.encodeToString(selectedSubject)
+                                    showDialouge = false
+                                    navController.navigate(campusConnectScreen.ShowInternalMarksScreen.name + "/$subjectJson")
+                                },
+                                onTapOutside = {
+                                    showDialouge = false
+                                }
+                            )
+                        }
+                        if (showDeleteDialouge) {
+                            Alert(
+                                title1 = "Delete",
+                                title2 = "Cancel",
+                                subjectName = selectedSubject?.name ?: "No Subject",
+                                onAdd = {
+                                    viewModel.deleteSubj(
+                                        faculty = selectedSubject?.faculty ?: "",
+                                        section = selectedSubject?.section ?: "",
+                                        semester = selectedSubject?.semester ?: "",
+                                        subjectCode = selectedSubject?.subjectCode ?: ""
+                                    )
+                                    showDeleteDialouge = false
+                                    //navController.navigate(campusConnectScreen.AttendanceHomeScreen.name)
+                                },
+                                onShow = {
+                                    showDeleteDialouge = false
+                                },
+                                onTapOutside = {
+                                    showDeleteDialouge = false
+                                }
+                            )
+                        }
+
+
                     }
                 }
             }

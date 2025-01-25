@@ -1,6 +1,8 @@
 package com.example.teacherapp.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +33,7 @@ import com.example.teacherapp.model.getAddedData.Subject
 
 //to show subject name
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun CardView(
@@ -45,7 +48,8 @@ fun CardView(
     ),
     size:Int=50,
     title:String="hehehe",
-    onClick: () -> Unit={}
+    onClick: () -> Unit={},
+    onLongpressed:()->Unit={}
 ){
 //    val eachsubj:Subject=Subject(
 //        faculty = "faculty",
@@ -61,9 +65,14 @@ fun CardView(
         .fillMaxWidth()
         .wrapContentHeight()
         .padding(10.dp)
-        .clickable {
-            onClick()
-        },
+        .combinedClickable(
+            onClick = {
+                onClick()
+            },
+            onLongClick = {
+                onLongpressed()
+            }
+        ),
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),

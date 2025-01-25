@@ -10,12 +10,14 @@ data class LoadingState(
         val FAILED= LoadingState(Status.FAILIED)
         val SUCCESS= LoadingState(Status.SUCCESS)
         val LOADING = LoadingState(Status.LOADING)
+        val EMPTY =  LoadingState(Status.EMPTY)
     }
 
     enum class Status{
         SUCCESS,
         FAILIED,
         LOADING,
-        IDLE
+        IDLE,
+        EMPTY
     }
 }
