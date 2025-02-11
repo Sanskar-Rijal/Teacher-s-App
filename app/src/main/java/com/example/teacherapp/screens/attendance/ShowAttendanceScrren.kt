@@ -1,5 +1,11 @@
 package com.example.teacherapp.screens.attendance
 
+import android.content.Context
+import android.content.Intent
+import android.media.MediaScannerConnection
+import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +45,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
@@ -50,6 +57,10 @@ import com.example.teacherapp.model.showAttendance.showAttendanceRequest
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.utils.getRollno
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.File
+import java.io.FileOutputStream
 
 
 @Composable
@@ -60,6 +71,8 @@ fun ShowAttendance(navController: NavController= NavController(LocalContext.curr
     val data: showAttendanceResponse = showAttendanceViewmodel.item
 
     val uiState = showAttendanceViewmodel.state.collectAsState()
+
+    val context= LocalContext.current
 
 
     LaunchedEffect(key1 = null) {
@@ -75,6 +88,12 @@ fun ShowAttendance(navController: NavController= NavController(LocalContext.curr
         topBar = {
             AppBarbySans(
                 title = "Show Attendance",
+                downloadExcel = true,
+                ondownloadExcelClicked = {
+                    MakeandSaveExcelFile(frontendData=subject,
+                        context = context,
+                        backenddata =data)
+                },
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
                 navController.popBackStack()
@@ -185,5 +204,89 @@ fun Showatt(
 
 
         }
+    }
+}
+
+fun MakeandSaveExcelFile(frontendData:Subject?,
+    context: Context,backenddata:showAttendanceResponse){
+
+    try {
+
+        //saving the file in directory
+        val filename = "${frontendData?.name?:"null"} attendance " +
+                "${frontendData?.faculty?:"null"}${frontendData?.section?:"null"}.xlsx"
+        //saving at downloads folder
+        val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+        val file = File(downloadsPath, filename)
+
+        // Notify MediaStore to remove stale references before file operations
+        MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null) { path, uri ->
+            Log.d("kamala", "MediaScanner finished scanning: $path")
+        }
+
+
+        // Check if the file already exists, and delete it
+        if (file.exists()) {
+            Log.d("kamala", "File deletion failed, retrying...")
+            val deleted = file.delete()
+            if (deleted) {
+                //notifying the media store
+                MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null, null)
+            }
+        }
+         //if there is no files we create a new one or override it after deleting
+        val workBook = XSSFWorkbook() //creating excel workbook
+
+        //creating first sheet inside workbook
+        val sheet: Sheet = workBook.createSheet("Attendance${frontendData?.faculty?:"null"}${frontendData?.section?:"null"}")
+
+        //creating header row i.e first row
+        val headerRow = sheet.createRow(0)
+
+        headerRow.createCell(0).setCellValue("Student Name")
+        headerRow.createCell(1).setCellValue("Roll No")
+        headerRow.createCell(2).setCellValue("Class Attended")
+
+        //now giving the row data of attendance
+        backenddata.attendance.forEachIndexed { index, attendance ->
+            val row = sheet.createRow(index + 1)
+            row.createCell(0).setCellValue(attendance.name?:"no data")
+            row.createCell(1).setCellValue(getRollno(attendance.email)?:"no data")
+            row.createCell(2).setCellValue("${attendance.totalClassesAttended?:"0"}/${attendance.totalClassesConducted?:"0"}")
+        }
+
+        FileOutputStream(file).use { outputStream ->
+            Log.d("kamala", "inside fileoutput stream")
+            workBook.write(outputStream)
+            workBook.close()
+            Log.d("kamala", "finished work in fileoutput stream")
+        }
+
+        // Notify MediaStore of the new file
+        MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null, null)
+
+        Toast.makeText(context, "File Downloaded Successfully", Toast.LENGTH_SHORT).show()
+
+        //open the file after it is saved
+        OpenExcelFile(context,file)
+    }
+    catch (ex:Exception){
+        Log.d("kamala", "${ex.localizedMessage}")
+        Toast.makeText(context, "Failed To Download File :${ex.localizedMessage}", Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+fun OpenExcelFile(context: Context,file: File){
+    try{
+        val uri = FileProvider.getUriForFile(context,"${context.packageName}.provider",file)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }catch (ex:Exception){
+        Toast.makeText(context, "No app available to open this file.", Toast.LENGTH_LONG).show()
     }
 }

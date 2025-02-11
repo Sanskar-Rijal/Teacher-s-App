@@ -128,6 +128,10 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.1.2")
     implementation ("androidx.datastore:datastore:1.1.2")
 
+    //working with excel files in android
+    implementation ("org.apache.poi:poi-ooxml:5.2.3")
+    implementation ("org.apache.commons:commons-compress:1.21")
+
 
 }
 

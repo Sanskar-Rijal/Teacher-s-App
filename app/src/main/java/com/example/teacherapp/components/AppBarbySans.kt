@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.sp
 fun AppBarbySans(
     title: String="Attendance",
     icon:ImageVector?=null,
+    downloadExcel:Boolean=false,
+    ondownloadExcelClicked:()->Unit={},
     onBackArrowClicked:()->Unit={}
 ) {
 
@@ -57,6 +60,19 @@ fun AppBarbySans(
                 }
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(Color(0xFFF5F4F4))
+        colors = TopAppBarDefaults.topAppBarColors(Color(0xFFF5F4F4)),
+        actions = {
+            //show only on ShowAttendanceScreen
+            if(downloadExcel){
+              IconButton(onClick = {
+                  ondownloadExcelClicked.invoke() }){
+
+                  Icon(imageVector = Icons.Default.Download,
+                      contentDescription = "Download Excel File",
+                      tint = MaterialTheme.colorScheme.onPrimaryContainer)
+              }
+            }
+
+        }
     )
 }
