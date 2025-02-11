@@ -56,6 +56,7 @@ import com.example.teacherapp.model.showAttendance.Attendance
 import com.example.teacherapp.model.showAttendance.showAttendanceRequest
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.screens.LoginScreen.LoadingState
+import com.example.teacherapp.utils.OpenExcelFile
 import com.example.teacherapp.utils.getRollno
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -266,27 +267,14 @@ fun MakeandSaveExcelFile(frontendData:Subject?,
         // Notify MediaStore of the new file
         MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null, null)
 
-        Toast.makeText(context, "File Downloaded Successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "File Saved  Successfully", Toast.LENGTH_SHORT).show()
 
         //open the file after it is saved
         OpenExcelFile(context,file)
     }
     catch (ex:Exception){
         Log.d("kamala", "${ex.localizedMessage}")
-        Toast.makeText(context, "Failed To Download File :${ex.localizedMessage}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Failed To Save File :${ex.localizedMessage}", Toast.LENGTH_SHORT).show()
     }
 
-}
-
-fun OpenExcelFile(context: Context,file: File){
-    try{
-        val uri = FileProvider.getUriForFile(context,"${context.packageName}.provider",file)
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(uri,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-    }catch (ex:Exception){
-        Toast.makeText(context, "No app available to open this file.", Toast.LENGTH_LONG).show()
-    }
 }

@@ -1,5 +1,10 @@
 package com.example.teacherapp.screens.internalmarks
 
+import android.content.Context
+import android.media.MediaScannerConnection
+import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +53,12 @@ import com.example.teacherapp.model.showAttendance.Attendance
 import com.example.teacherapp.model.showAttendance.showAttendanceResponse
 import com.example.teacherapp.screens.LoginScreen.LoadingState
 import com.example.teacherapp.screens.attendance.Showatt
+import com.example.teacherapp.utils.OpenExcelFile
 import com.example.teacherapp.utils.getRollno
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.File
+import java.io.FileOutputStream
 
 @Composable
 fun ShowInternalMarks(navController: NavController = NavController(LocalContext.current),
@@ -60,6 +70,8 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
     val data: ShowMarksResponse = showmarks.item
 
     val uiState = showmarks.state.collectAsState()
+
+    val context:Context= LocalContext.current
 
 
     LaunchedEffect(key1 = null) {
@@ -76,6 +88,12 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
         topBar = {
             AppBarbySans(
                 title = "Show InternalMarks",
+                downloadExcel = true,
+                ondownloadExcelClicked = {
+                    saveExcelFile(context=context,
+                        frontendData = subject,
+                        showmarks =data)
+                },
                 icon = Icons.AutoMirrored.Filled.ArrowBack
             ) {
                 navController.popBackStack()
@@ -184,3 +202,65 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
             }
         }
     }
+
+fun saveExcelFile(
+    context: Context,
+    frontendData:Subject?,
+    showmarks: ShowMarksResponse
+) {
+    try {
+    //deleting file if already created
+    val filename="${frontendData?.faculty?:"null"} Internal Marks" +
+            "${frontendData?.section?:"null"}.xlsx"
+    val downloadPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+    val file = File(downloadPath,filename)
+
+        //notify to media store to check the files in the download folder from cache memroy and all
+    MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath),null){path,uri->
+        Log.d("kamala", "MediaScanner finished scanning: $path")
+    }
+    //if file exits deleting the file
+    if(file.exists()){
+        val deleted=file.delete() //returns a boolean value
+        if(deleted){
+            //notify the media scanner
+            MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath),null,null)
+        }
+    }
+
+    val workBook=XSSFWorkbook()
+
+    val sheet:Sheet = workBook.createSheet("Internal Marks${frontendData?.faculty?:"null"}${frontendData?.section?:"null"}")
+
+    val headerRow=sheet.createRow(0)
+
+    headerRow.createCell(0).setCellValue("Student Name")
+    headerRow.createCell(1).setCellValue("Roll No")
+    headerRow.createCell(2).setCellValue("Marks")
+
+    showmarks.data.forEachIndexed { index, data ->
+        val row=sheet.createRow(index+1)
+
+        row.createCell(0).setCellValue(data.studentName)
+        row.createCell(1).setCellValue(getRollno(data.studentEmail))
+        row.createCell(2).setCellValue("${data.marks?:"0"}/20")
+    }
+
+    FileOutputStream(file).use {outputStream->
+        workBook.write(outputStream)
+        workBook.close()
+    }
+
+    //notify the media store that new file has been made
+    MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath),null,null)
+
+    Toast.makeText(context,"File Saved Successfully",Toast.LENGTH_SHORT).show()
+
+    //opening the file after it is downloaded
+    OpenExcelFile(context, file)
+    }catch (ex:Exception){
+        Toast.makeText(context,"Error in saving file",Toast.LENGTH_SHORT).show()
+    }
+
+}
