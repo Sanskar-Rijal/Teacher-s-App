@@ -50,6 +50,7 @@ import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.components.ShowText
 import com.example.teacherapp.model.getAddedData.Subject
 import com.example.teacherapp.model.getstudentbysec.studentResponse
 import com.example.teacherapp.model.showAttendance.Attendance
@@ -121,6 +122,16 @@ fun ShowAttendance(navController: NavController= NavController(LocalContext.curr
                     if (uiState.value == LoadingState.LOADING) {
                         LoadingDialog()
                     } else {
+
+                        if(data.attendance.isEmpty()){
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center) {
+                                ShowText()
+                            }
+
+
+                        }
                         LazyColumn(
                             contentPadding = PaddingValues(10.dp)
                         ) {

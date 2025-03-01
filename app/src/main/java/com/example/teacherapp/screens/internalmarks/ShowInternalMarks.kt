@@ -46,6 +46,7 @@ import androidx.navigation.NavController
 import com.example.teacherapp.R
 import com.example.teacherapp.components.AppBarbySans
 import com.example.teacherapp.components.LoadingDialog
+import com.example.teacherapp.components.ShowText
 import com.example.teacherapp.model.ShowInternalMarks.Data
 import com.example.teacherapp.model.ShowInternalMarks.ShowMarksResponse
 import com.example.teacherapp.model.getAddedData.Subject
@@ -118,6 +119,14 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
                     LoadingDialog()
                 } else {
                     Column(modifier = Modifier.padding(10.dp)) {
+
+                    }
+                        if(data.data.isEmpty()){
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center) {
+                                ShowText()
+                            }
 
                         LazyColumn(
                             contentPadding = PaddingValues(10.dp)
@@ -244,7 +253,7 @@ fun saveExcelFile(
 
         row.createCell(0).setCellValue(data.studentName)
         row.createCell(1).setCellValue(getRollno(data.studentEmail))
-        row.createCell(2).setCellValue("${data.marks?:"0"}/20")
+        row.createCell(2).setCellValue("${data.marks?:"0"}")
     }
 
     FileOutputStream(file).use {outputStream->
