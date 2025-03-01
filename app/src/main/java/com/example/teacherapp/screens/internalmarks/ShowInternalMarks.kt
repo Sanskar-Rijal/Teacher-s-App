@@ -121,19 +121,20 @@ fun ShowInternalMarks(navController: NavController = NavController(LocalContext.
                     Column(modifier = Modifier.padding(10.dp)) {
 
                     }
-                        if(data.data.isEmpty()){
+                        if(data.data.isEmpty()) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center) {
+                                contentAlignment = Alignment.Center
+                            ) {
                                 ShowText()
                             }
-
+                        }
                         LazyColumn(
                             contentPadding = PaddingValues(10.dp)
                         ) {
                             items(data.data) { list ->
                                 showMarks(data = list)
-                            }
+
                         }
                     }
                 }
