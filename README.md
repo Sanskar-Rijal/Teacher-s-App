@@ -74,3 +74,44 @@ Repository: [Campus Connect – Backend](https://github.com/Sangyog10/Campus-con
 Repository: [Student App](https://github.com/Sanskar-Rijal/Student_App)
 
 ---
+
+## App screenShots
+<div align="start">
+  <a href="https://imgur.com/mDSFOS9">
+    <img src="https://i.imgur.com/mDSFOS9.gif" title="source: imgur.com" height="400" width="200" style="margin-right: 20px;" />
+  </a>
+  <a href="https://imgur.com/4gp9hX0">
+    <img src="https://i.imgur.com/4gp9hX0.gif" title="source: imgur.com" height="400" width="200" style="margin-right: 20px;" />
+  </a>
+  <a href="https://imgur.com/oJYkmF1">
+    <img src="https://i.imgur.com/oJYkmF1.gif" title="source: imgur.com" height="400" width="200" style="margin-right: 20px;" />
+  </a>
+  <a href="https://imgur.com/6CsiAmL">
+    <img src="https://i.imgur.com/6CsiAmL.gif" title="source: imgur.com" height="400" width="200" style="margin-right: 20px;" />
+  </a>
+  <a href="https://imgur.com/no0yLqV">
+    <img src="https://i.imgur.com/no0yLqV.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+  <a href="https://imgur.com/pt7I0Dk">
+    <img src="https://i.imgur.com/pt7I0Dk.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+    <a href="https://imgur.com/x5y75Bd">
+    <img src="https://i.imgur.com/x5y75Bd.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+    <a href="https://imgur.com/3gu7Qzx">
+    <img src="https://i.imgur.com/3gu7Qzx.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+    <a href="https://imgur.com/VOHyaeQ">
+    <img src="https://i.imgur.com/VOHyaeQ.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+   <a href="https://imgur.com/REORd5m">
+    <img src="https://i.imgur.com/REORd5m.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+  <a href="https://imgur.com/ulFTo70">
+    <img src="https://i.imgur.com/ulFTo70.gif" title="source: imgur.com" height="400" width="200" />
+  </a>
+  
+  
+</div>
+
+---
